@@ -534,4 +534,4 @@ lint/tmp/
 # Lock Files
 yarn.lock
 package-lock.json
-Pipfile.lock
+# Pipfile.lock
