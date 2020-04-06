@@ -13,6 +13,7 @@ django-allauth = "*"
 djangorestframework-jwt = "*"
 z3-solver = "*"
 dj-database-url = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"
