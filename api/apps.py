@@ -1,7 +1,4 @@
 from django.apps import AppConfig
-import requests
-import html5lib
-from bs4 import BeautifulSoup
 
 def startup():
     print("Hello world!")
