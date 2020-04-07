@@ -170,7 +170,7 @@ def init(request):
         friday = Day.objects.get_or_create(day_code='F', day_name='Friday')
         saturday = Day.objects.get_or_create(day_code='S', day_name='Saturday')
     except Exception as e:
-        print(e)
+      return HttpResponse(e)
 
     try:
         with open('ccs_offerings.tsv','r') as ccs_details:
