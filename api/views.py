@@ -173,7 +173,7 @@ def init(request):
         print(e)
 
     try:
-        with open('ccs_offerings.tsv','r') as ccs_details:
+        with open('/app/ccs_offerings.tsv','r') as ccs_details:
             count = 1
             for l in ccs_details:
                 details = l.split('\t')
@@ -214,4 +214,4 @@ def init(request):
     except Exception as e:
         print(e)
       
-    return HttpResponse('Adrienne Soliven is cute <3'+'\n'+os.getcwd())
+    return HttpResponse('Adrienne Soliven is cute <3')
