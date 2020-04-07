@@ -22,6 +22,7 @@ router.register(r'colleges', views.CollegeViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),                
+    path('api/init', views.init),                
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/preferencelist/<int:pk>/', views.PreferenceList.as_view()),     
     path('api/courseprioritylist/<int:pk>/', views.CoursePriorityList.as_view()),     
