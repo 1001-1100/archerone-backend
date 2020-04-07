@@ -7,6 +7,8 @@ from .satsolver import solve
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import os
+
 class UserViewSet(viewsets.ModelViewSet):
   serializer_class = UserSerializer
   queryset = User.objects.all()              
@@ -211,5 +213,5 @@ def init(request):
                 count += 1
     except Exception as e:
         print(e)
-
-    return HttpResponse('Adrienne Soliven is cute <3')
+      
+    return HttpResponse('Adrienne Soliven is cute <3'+'\n'+os.getcwd())
