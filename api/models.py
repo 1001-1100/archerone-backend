@@ -20,7 +20,7 @@ class College(models.Model):
         verbose_name_plural = _('colleges')
 
 class Degree(models.Model):
-    degree_code = models.CharField(max_length=8, unique=True)
+    degree_code = models.CharField(max_length=10, unique=True)
     degree_name = models.CharField(max_length=120, unique=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
@@ -31,7 +31,7 @@ class Degree(models.Model):
 
 class Flowchart(models.Model):
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
-    year = models.CharField(max_length=3)
+    year = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -49,7 +49,7 @@ class FlowchartTerm(models.Model):
         verbose_name_plural = _('flowchart terms')
 
 class Course(models.Model):
-    course_code = models.CharField(max_length=8, unique=True)
+    course_code = models.CharField(max_length=10, unique=True)
     course_name = models.CharField(max_length=120)
     course_desc = models.TextField()
     college = models.ForeignKey(College, on_delete=models.CASCADE, null=True)
@@ -72,7 +72,7 @@ class Faculty(models.Model):
         verbose_name_plural = _('faculty members')
 
 class Section(models.Model):
-    section_code = models.CharField(max_length=6, unique=True)
+    section_code = models.CharField(max_length=10, unique=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -100,7 +100,7 @@ class Room(models.Model):
         verbose_name_plural = _('rooms')
 
 class Day(models.Model):
-    day_code = models.CharField(max_length=2, unique=True)
+    day_code = models.CharField(max_length=5, unique=True)
     day_name = models.CharField(max_length=10, unique=True)
     timestamp = models.DateTimeField(auto_now=True)
 
