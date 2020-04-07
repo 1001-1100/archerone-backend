@@ -151,8 +151,8 @@ def init(request):
         Degree.objects.get_or_create(degree_code='BS IT', degree_name='Bachelor of Science in Information Technology', college=ccs[0])
         Degree.objects.get_or_create(degree_code='BS-PSY', degree_name='Bachelor of Science in Psychology', college=cla[0])
         Degree.objects.get_or_create(degree_code='AB-SOC', degree_name='Bachelor of Arts in Sociology', college=cla[0])
-        Degree.objects.get_or_create(degree_code='AEI-BSA', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Accountancy', college=soe[0])
-        Degree.objects.get_or_create(degree_code='AEI-ADV', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Advertising Management', college=soe[0])
+        # Degree.objects.get_or_create(degree_code='AEI-BSA', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Accountancy', college=soe[0])
+        # Degree.objects.get_or_create(degree_code='AEI-ADV', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Advertising Management', college=soe[0])
         # Buildings
         goks = Building.objects.get_or_create(bldg_code='GK',bldg_name='Gokongwei Hall')
         lasalle = Building.objects.get_or_create(bldg_code='LS',bldg_name='St. La Salle Hall')
