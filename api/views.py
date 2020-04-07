@@ -173,7 +173,7 @@ def init(request):
         print(e)
 
     try:
-        with open('/app/ccs_offerings.tsv','r') as ccs_details:
+        with open('ccs_offerings.tsv','r') as ccs_details:
             count = 1
             for l in ccs_details:
                 details = l.split('\t')
@@ -212,6 +212,6 @@ def init(request):
                     CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, current_enrolled=current_enrolled,max_enrolled=max_enrolled, status=status)
                 count += 1
     except Exception as e:
-        print(e)
+      return HttpResponse(e)
       
     return HttpResponse('Adrienne Soliven is cute <3')
