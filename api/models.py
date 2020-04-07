@@ -72,7 +72,7 @@ class Faculty(models.Model):
         verbose_name_plural = _('faculty members')
 
 class Section(models.Model):
-    section_code = models.CharField(max_length=3, unique=True)
+    section_code = models.CharField(max_length=6, unique=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
