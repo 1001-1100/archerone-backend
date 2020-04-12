@@ -23,6 +23,7 @@ router.register(r'flowchartterms', views.FlowchartTermViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),                
+    path('api/init/', views.init),   
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/preferencelist/<int:pk>/', views.PreferenceList.as_view()),     
     path('api/schedulelist/<int:pk>/', views.SavedScheduleList.as_view()),     
