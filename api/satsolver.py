@@ -112,13 +112,71 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
                                     firstEnd = datetime.datetime.combine(datetime.date.today(), firstTime.end_time)
                                     secondBegin = datetime.datetime.combine(datetime.date.today(), secondTime.begin_time)
                                     difference = (secondBegin - firstEnd).total_seconds() / 60
-                                    if(abs(difference - break_length) > 60):
+                                    if(abs(difference - break_length) <= 60):
                                         a = Bool(str(o.classnumber))
-                                        b = Not(Bool(str(o2.classnumber)))
-                                        z3.add(Implies(a,b))
+                                        b = Bool(str(o2.classnumber))
+                                        # z3.add(Implies(a,b))
                                         
 
     return otherPreferences
+
+def checkPreferences(z3, model, preferences):
+    unsatisfied = []
+    offerings = None
+    min_courses = None
+    max_courses = None
+    allOfferings = CourseOffering.objects.none()
+    for o in model:
+        if(model[o]):
+            allOfferings = allOfferings | CourseOffering.objects.filter(classnumber=int(o.name()))
+    for o in model:
+        if(model[o]):
+            offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            for p in preferences:
+                if(p.earliest_class_time != None):
+                    earliest = p.earliest_class_time
+                    for o in offerings:
+                        if(earliest > o.timeslot.begin_time):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts earlier than '+str(earliest))
+                if(p.latest_class_time != None):
+                    latest = p.latest_class_time
+                    for o in offerings:
+                        if(latest < o.timeslot.end_time):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts later than '+str(latest))
+                if(p.preferred_days != None):
+                    day_id = p.preferred_days.id
+                    for o in offerings:
+                        if(day_id != o.day.id):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
+                if(p.preferred_buildings != None):
+                    pass
+                if(p.preferred_sections != None):
+                    section_id = p.preferred_sections.id
+                    for o in offerings:
+                        if(section_id != o.section.id):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
+                if(p.preferred_faculty != None):
+                    faculty_id = p.preferred_faculty.id
+                    for o in offerings:
+                        if(o.faculty != None):
+                            if(faculty_id != o.faculty.id):
+                                pass
+                                # unsatisfied.append('faculty')
+                if(p.min_courses != None):
+                    min_courses = p.min_courses
+                if(p.max_courses != None):
+                    max_courses = p.max_courses
+                if(p.break_length != None):
+                    break_length = p.break_length
+    if(min_courses != None):
+        if(int(min_courses) > len(allOfferings)/2):
+            print("boop")
+            unsatisfied.append('Number of courses are less than '+str(min_courses))
+    if(max_courses != None):
+        if(int(max_courses) < len(allOfferings)/2):
+            print("beep")
+            unsatisfied.append('Number of courses are more than '+str(max_courses))
+    return unsatisfied
 
 def addExtraConstraints(z3, model):
     current = []
@@ -163,13 +221,15 @@ def solve(highCourses, lowCourses, preferences):
             
         schedule['offerings'] = offerings
         schedule['information'] = set(information)
+        schedule['preferences'] = checkPreferences(z3, model, preferences)
+        print(schedule['information'])
+        print(schedule['preferences'])
         schedules.append(schedule)
+
         addExtraConstraints(z3, model)
         addPreferences(z3, highCourses, lowCourses, preferences)
+
     return schedules 
-    
-
-
 
 # def start(inputCourses, inputProfs, inputNotSections, inputNotRooms, inputNotBefore, inputNotAfter, inputNotDays, inputCheckFull, num):
 

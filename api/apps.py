@@ -1,4 +1,8 @@
 from django.apps import AppConfig
+# import requests
+# import html5lib
+# from bs4 import BeautifulSoup
+import random
 
 def startup():
     print("Hello world!")
@@ -130,8 +134,10 @@ def startup():
                     day = Day.objects.get(day_code=d)
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
                     room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
-                    current_enrolled = 0
-                    max_enrolled = 40
+                    max_enrolled = random.randint(20,40)
+                    current_enrolled = random.randint(0,40)
+                    if(current_enrolled > max_enrolled):
+                        current_enrolled = max_enrolled
                     status = True
                     CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, current_enrolled=current_enrolled,max_enrolled=max_enrolled, status=status)
                 count += 1
