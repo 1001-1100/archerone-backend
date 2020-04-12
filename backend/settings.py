@@ -51,13 +51,21 @@ INSTALLED_APPS = [
 ]
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'archerone.testing@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ARCHER1:D'
+# DEFAULT_FROM_EMAIL = 'archerone.testing@gmail.com'
+
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'archerone.testing@gmail.com'
-EMAIL_HOST_PASSWORD = 'ARCHER1:D'
-DEFAULT_FROM_EMAIL = 'archerone.testing@gmail.com'
+EMAIL_USE_TLS = True
 
 SITE_ID = 1
 
