@@ -126,7 +126,7 @@ class CustomRegisterSerializer(RegisterSerializer):
       user.id_num = self.get_cleaned_data().get('id_num')
       adapter.save_user(request, user, self)
       self.custom_signup(request, user)
-      setup_user_email(request, user, [])
+      # setup_user_email(request, user, [])
       return user
 
 class PasswordResetSerializer(serializers.Serializer):
