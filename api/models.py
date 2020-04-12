@@ -46,7 +46,7 @@ class Course(models.Model):
 
 class FlowchartTerm(models.Model):
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
-    batch = models.CharField(max_length=3)
+    batch = models.CharField(max_length=6)
     courses = models.ManyToManyField(Course)
     year = models.IntegerField()
     term = models.IntegerField()
@@ -75,7 +75,7 @@ class Faculty(models.Model):
         verbose_name_plural = _('faculty members')
 
 class Section(models.Model):
-    section_code = models.CharField(max_length=3, unique=True)
+    section_code = models.CharField(max_length=6, unique=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -103,7 +103,7 @@ class Room(models.Model):
         verbose_name_plural = _('rooms')
 
 class Day(models.Model):
-    day_code = models.CharField(max_length=2, unique=True)
+    day_code = models.CharField(max_length=3, unique=True)
     day_name = models.CharField(max_length=10, unique=True)
     timestamp = models.DateTimeField(auto_now=True)
 
