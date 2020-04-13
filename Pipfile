@@ -16,6 +16,8 @@ dj-database-url = "*"
 psycopg2 = "*"
 gunicorn = "*"
 django-heroku = "*"
+markdown = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"
