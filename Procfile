@@ -1,2 +1,2 @@
-release: python manage.py makemigrations &&  python manage.py migrate --fake --no-input
+release: python manage.py makemigrations &&  python manage.py migrate --no-input
 web: gunicorn backend.wsgi

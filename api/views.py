@@ -126,8 +126,8 @@ class NonFriendList(APIView):
   def get(self, request, pk, format=None):
       user = User.objects.get(id=pk)
       nonFriends = User.objects.all()
-      for f in user.friends:
-        nonFriends = nonFriends.exclude(id=f)
+      for f in user.friends.all():
+        nonFriends = nonFriends.exclude(id=f.id)
       serializer = UserSerializer(nonFriends, many=True)
       return Response(serializer.data)
 
