@@ -122,6 +122,15 @@ class CoursePriorityList(APIView):
       coursePriority = CoursePriority.objects.filter(id=pk).delete()
       return Response(None)
 
+class NonFriendList(APIView):
+  def get(self, request, pk, format=None):
+      user = User.objects.get(id=pk)
+      nonFriends = User.objects.all()
+      for f in user.friends:
+        nonFriends = nonFriends.exclude(id=f)
+      serializer = UserSerializer(nonFriends, many=True)
+      return Response(serializer.data)
+
 class FriendRequestList(APIView):
   def get(self, request, pk, format=None):
       friendRequests = FriendRequest.objects.filter(to_user=pk)
