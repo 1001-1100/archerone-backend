@@ -38,7 +38,7 @@ class Course(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     # flowchart information
     # flowchart_terms = models.ManyToManyField(FlowchartTerm)
-    prerequisite_to = models.ManyToManyField('self', symmetrical=False, null=True)
+    prerequisite_to = models.ManyToManyField('self', symmetrical=False, null=True, blank=True)
 
     class Meta:
         verbose_name = _('course')
