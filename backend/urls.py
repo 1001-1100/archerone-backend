@@ -20,6 +20,8 @@ router.register(r'preferences', views.PreferenceViewSet)
 router.register(r'timeslots', views.TimeslotViewSet)     
 router.register(r'coursepriority', views.CoursePriorityViewSet)     
 router.register(r'courseoffering', views.CourseOfferingViewSet)     
+router.register(r'friendrequests', views.FriendRequestViewSet)     
+router.register(r'notifications', views.NotificationViewSet)     
 router.register(r'colleges', views.CollegeViewSet)    
 router.register(r'flowchartterms', views.FlowchartTermViewSet)
 
