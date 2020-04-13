@@ -140,18 +140,6 @@ class CourseOffering(models.Model):
         verbose_name = _('course offering')
         verbose_name_plural = _('course offerings')
 
-class FriendRequest(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    seen = models.BooleanField(default=False)
-    accepted = models.BooleanField(default=False)
-
-class Notification(models.Model):
-    content = models.CharField(max_length=500)
-    date = models.DateTimeField(auto_now=True)
-    seen = models.BooleanField(default=False)
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 class User(AbstractBaseUser):
     # username = models.CharField(max_length=9) 
     username = None
@@ -178,6 +166,18 @@ class User(AbstractBaseUser):
 
     def __str__(self):              
         return self.email
+
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+
+class Notification(models.Model):
+    content = models.CharField(max_length=500)
+    date = models.DateTimeField(auto_now=True)
+    seen = models.BooleanField(default=False)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Schedule(models.Model):
     title = models.CharField(max_length=50)
