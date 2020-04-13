@@ -3,6 +3,8 @@ from django.urls import path, include
 from rest_framework import routers                    
 from rest_framework_jwt.views import refresh_jwt_token
 from api import views                            
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()                      
 router.register(r'users', views.UserViewSet)
@@ -34,4 +36,4 @@ urlpatterns = [
     path('api/auth/registration/', include('rest_auth.registration.urls')),                
     path('api/refresh-token/', refresh_jwt_token),
     path('', include('django.contrib.auth.urls')),                
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
