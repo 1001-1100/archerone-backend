@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets          
-from .serializers import CustomRegisterSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
-from .models import User, Schedule, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
+from .serializers import CustomRegisterSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
+from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 from .satsolver import solve
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -50,6 +50,14 @@ class BuildingViewSet(viewsets.ModelViewSet):
 class SectionViewSet(viewsets.ModelViewSet):       
   serializer_class = SectionSerializer 
   queryset = Section.objects.all()              
+
+class FriendRequestViewSet(viewsets.ModelViewSet):       
+  serializer_class = FriendRequestSerializer 
+  queryset = FriendRequest.objects.all()              
+
+class NotificationViewSet(viewsets.ModelViewSet):       
+  serializer_class = NotificationSerializer 
+  queryset = Notification.objects.all()              
 
 class PreferenceViewSet(viewsets.ModelViewSet):       
   serializer_class = PreferenceSerializer 
