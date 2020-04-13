@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/init/', views.init),   
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/preferencelist/<int:pk>/', views.PreferenceList.as_view()),     
+    path('api/friendrequestlist/<int:pk>/', views.FriendRequestList.as_view()),     
+    path('api/notificationlist/<int:pk>/', views.NotificationList.as_view()),     
     path('api/schedulelist/<int:pk>/', views.SavedScheduleList.as_view()),     
     path('api/courseprioritylist/<int:pk>/', views.CoursePriorityList.as_view()),     
     path('api/courseofferingslist/', views.CourseOfferingsList.as_view()),     

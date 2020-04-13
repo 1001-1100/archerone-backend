@@ -122,6 +122,21 @@ class CoursePriorityList(APIView):
       coursePriority = CoursePriority.objects.filter(id=pk).delete()
       return Response(None)
 
+class FriendRequestList(APIView):
+  def get(self, request, pk, format=None):
+      friendRequests = FriendRequest.objects.filter(to_user=pk)
+      serializer = FriendRequestSerializer(friendRequests, many=True)
+      for d in serializer.data:
+        d['from_user_fname'] = User.objects.get(id=d['from_user']).first_name
+        d['from_user_lname'] = User.objects.get(id=d['from_user']).last_name
+      return Response(serializer.data)
+
+class NotificationList(APIView):
+  def get(self, request, pk, format=None):
+      notifications = Notification.objects.filter(to_user=pk)
+      serializer = NotificationSerializer(notifications, many=True)
+      return Response(serializer.data)
+
 class CourseOfferingsList(APIView):
   def post(self, request, format=None):
       courseData = []
