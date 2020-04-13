@@ -168,8 +168,8 @@ class User(AbstractBaseUser):
         return self.email
 
 class FriendRequest(models.Model):
-    from_user = models.ForeignKey(_('from_user'), User, on_delete=models.CASCADE)
-    to_user = models.ForeignKey(_('to_user'), User, on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
 
