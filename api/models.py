@@ -31,8 +31,8 @@ class Degree(models.Model):
 
 class Course(models.Model):
     course_code = models.CharField(max_length=8, unique=True)
-    course_name = models.CharField(max_length=120)
-    course_desc = models.TextField()
+    course_name = models.CharField(max_length=120, blank=True)
+    course_desc = models.TextField(blank=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE, null=True)
     units = models.IntegerField()
     timestamp = models.DateTimeField(auto_now=True)
