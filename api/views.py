@@ -133,7 +133,7 @@ class NonFriendList(APIView):
 
 class FriendRequestList(APIView):
   def get(self, request, pk, format=None):
-      friendRequests = FriendRequest.objects.filter(to_user=pk)
+      friendRequests = FriendRequest.objects.filter(to_user=pk).order_by('-date')
       serializer = FriendRequestSerializer(friendRequests, many=True)
       for d in serializer.data:
         d['from_user_fname'] = User.objects.get(id=d['from_user']).first_name
@@ -157,7 +157,7 @@ class SentRequestList(APIView):
 
 class NotificationList(APIView):
   def get(self, request, pk, format=None):
-      notifications = Notification.objects.filter(to_user=pk)
+      notifications = Notification.objects.filter(to_user=pk).order_by('-date')
       serializer = NotificationSerializer(notifications, many=True)
       return Response(serializer.data)
 

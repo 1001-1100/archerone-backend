@@ -81,7 +81,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 class FriendRequestSerializer(serializers.ModelSerializer):
   class Meta:
     model = FriendRequest 
-    fields = ('id', 'from_user', 'seen', 'accepted', 'to_user')
+    fields = ('id', 'from_user', 'seen', 'accepted', 'date', 'to_user')
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
