@@ -4,6 +4,9 @@ class ApiConfig(AppConfig):
     name = 'api'
     verbose_name = 'api'
     def ready(self):
-        import os
-        if os.environ.get('RUN_MAIN'):
-            pass
+        from django.db.models.signals import post_save
+        from django.utils.translation import ugettext_lazy as _
+        from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
+        from .signals import save_friend_request, save_schedule
+        post_save.connect(save_friend_request,sender=FriendRequest)
+        post_save.connect(save_schedule,sender=Schedule)

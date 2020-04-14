@@ -175,7 +175,7 @@ class FriendRequest(models.Model):
 
 class Notification(models.Model):
     content = models.CharField(max_length=500)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
     to_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
