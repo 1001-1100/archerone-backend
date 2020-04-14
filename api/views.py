@@ -151,7 +151,7 @@ class FriendList(APIView):
 
 class SentRequestList(APIView):
   def get(self, request, pk, format=None):
-      friendRequests = FriendRequest.objects.filter(from_user=pk)
+      friendRequests = FriendRequest.objects.filter(from_user=pk).exclude(accepted=True)
       serializer = FriendRequestSerializer(friendRequests, many=True)
       return Response(serializer.data)
 
