@@ -140,6 +140,21 @@ class FriendRequestList(APIView):
         d['from_user_lname'] = User.objects.get(id=d['from_user']).last_name
       return Response(serializer.data)
 
+class FriendList(APIView):
+  def get(self, request, pk, format=None):
+      user = User.objects.get(id=pk)
+      friends = User.objects.none()
+      for f in user.friends.all():
+        friends = friends | User.objects.filter(id=f.id)
+      serializer = UserSerializer(friends, many=True)
+      return Response(serializer.data)
+
+class SentRequestList(APIView):
+  def get(self, request, pk, format=None):
+      friendRequests = FriendRequest.objects.filter(from_user=pk)
+      serializer = FriendRequestSerializer(friendRequests, many=True)
+      return Response(serializer.data)
+
 class NotificationList(APIView):
   def get(self, request, pk, format=None):
       notifications = Notification.objects.filter(to_user=pk)
