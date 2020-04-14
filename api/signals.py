@@ -2,7 +2,7 @@ from .models import User, Schedule, FriendRequest, Notification, Course, Degree,
 
 def save_friend_request(sender, instance, **kwargs):
     if(instance.accepted):
-        Notification(content=instance.from_user.first_name+' accepted your friend request!', seen=False, to_user=instance.to_user).save()
+        Notification(content=instance.to_user.first_name+' accepted your friend request!', seen=False, to_user=instance.from_user).save()
 
 def save_schedule(sender, instance, **kwargs):
     for u in instance.user.friends.all():
