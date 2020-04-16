@@ -13,7 +13,7 @@ import datetime
 class College(models.Model):
     college_code = models.CharField(max_length=12, unique=True)
     college_name = models.CharField(max_length=120, unique=True)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('college')
@@ -23,7 +23,7 @@ class Degree(models.Model):
     degree_code = models.CharField(max_length=8, unique=True)
     degree_name = models.CharField(max_length=120, unique=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('degree')
@@ -35,7 +35,7 @@ class Course(models.Model):
     course_desc = models.TextField(blank=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE, null=True)
     units = models.IntegerField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     # flowchart information
     # flowchart_terms = models.ManyToManyField(FlowchartTerm)
     prerequisite_to = models.ManyToManyField('self', symmetrical=False)
@@ -50,7 +50,7 @@ class FlowchartTerm(models.Model):
     courses = models.ManyToManyField(Course)
     year = models.IntegerField()
     term = models.IntegerField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('flowchart term')
@@ -60,7 +60,7 @@ class FlowchartTerm(models.Model):
 #     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
 #     year = models.CharField(max_length=3)
 #     terms = models.ManyToManyField(FlowchartTerm)
-#     timestamp = models.DateTimeField(auto_now=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
 #     class Meta:
 #         verbose_name = _('flowchart')
@@ -68,7 +68,7 @@ class FlowchartTerm(models.Model):
 
 class Faculty(models.Model):
     full_name = models.CharField(max_length=100, unique=True)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('faculty member')
@@ -76,7 +76,7 @@ class Faculty(models.Model):
 
 class Section(models.Model):
     section_code = models.CharField(max_length=6, unique=True)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('section')
@@ -85,7 +85,7 @@ class Section(models.Model):
 class Building(models.Model):
     bldg_code = models.CharField(max_length=50, unique=True)
     bldg_name = models.CharField(max_length=100)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('building')
@@ -96,7 +96,7 @@ class Room(models.Model):
     room_name = models.CharField(max_length=50, unique=True)
     room_type = models.CharField(max_length=50, blank=True)
     room_capacity = models.IntegerField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('room')
@@ -105,7 +105,7 @@ class Room(models.Model):
 class Day(models.Model):
     day_code = models.CharField(max_length=3, unique=True)
     day_name = models.CharField(max_length=10, unique=True)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('day')
@@ -114,7 +114,7 @@ class Day(models.Model):
 class Timeslot(models.Model): 
     begin_time = models.TimeField()
     end_time = models.TimeField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('timeslot')
@@ -134,7 +134,7 @@ class CourseOffering(models.Model):
     current_enrolled = models.IntegerField()
     max_enrolled = models.IntegerField()
     status = models.BooleanField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('course offering')
@@ -149,12 +149,11 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=100)
     college = models.ForeignKey(College, on_delete=models.CASCADE)
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     # schedules = models.ManyToManyField(Schedule)
     is_active = models.BooleanField(default=True)
     objects = UserManager()
     friends = models.ManyToManyField('self')
-    timestamp = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'college', 'degree']
@@ -184,7 +183,7 @@ class Schedule(models.Model):
     title = models.CharField(max_length=50)
     courseOfferings = models.ManyToManyField(CourseOffering)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('schedule')
@@ -194,7 +193,7 @@ class CoursePriority(models.Model):
     courses = models.ForeignKey(Course,on_delete=models.CASCADE)
     priority = models.BooleanField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('course priority')
@@ -212,7 +211,7 @@ class Preference(models.Model):
     preferred_sections = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
     # course_priority = models.ForeignKey(CoursePriority, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('preference')

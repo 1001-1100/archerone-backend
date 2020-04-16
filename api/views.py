@@ -73,7 +73,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
-        schedules = Schedule.objects.filter(user=pk)
+        schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')
         serializer = ScheduleSerializer(schedules, many=True)
         for d in serializer.data:
           courseOfferings = []
@@ -153,6 +153,12 @@ class SentRequestList(APIView):
   def get(self, request, pk, format=None):
       friendRequests = FriendRequest.objects.filter(from_user=pk).exclude(accepted=True)
       serializer = FriendRequestSerializer(friendRequests, many=True)
+      return Response(serializer.data)
+
+class SearchCourse(APIView):
+  def get(self, request, term, format=None):
+      courses = Course.objects.filter(string__icontains=term)
+      serializer = CourseSerializer(courses , many=True)
       return Response(serializer.data)
 
 class NotificationList(APIView):
