@@ -157,7 +157,7 @@ class SentRequestList(APIView):
 
 class SearchCourse(APIView):
   def get(self, request, term, format=None):
-      courses = Course.objects.filter(string__icontains=term)
+      courses = Course.objects.filter(course_code__icontains=term)
       serializer = CourseSerializer(courses , many=True)
       return Response(serializer.data)
 
