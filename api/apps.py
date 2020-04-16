@@ -10,4 +10,4 @@ class ApiConfig(AppConfig):
         from .signals import save_friend_request, save_schedule
         post_save.connect(save_friend_request,sender=FriendRequest)
         post_save.connect(save_schedule,sender=Schedule)
-        post_save.connect(save_preference,sender=Preference)
+        # post_save.connect(save_preference,sender=Preference)
