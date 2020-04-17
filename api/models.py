@@ -131,8 +131,8 @@ class CourseOffering(models.Model):
     # term = models.IntegerField()
     # start_AY = models.IntegerField()
     # end_AY = models.IntegerField()
-    current_enrolled = models.IntegerField()
-    max_enrolled = models.IntegerField()
+    current_enrolled = models.IntegerField(blank=True, null=True)
+    max_enrolled = models.IntegerField(blank=True, null=True)
     status = models.BooleanField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

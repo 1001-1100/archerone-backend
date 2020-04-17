@@ -276,8 +276,6 @@ def init(request):
       return HttpResponse(e)
 
     try:
-        CourseOffering.objects.all().delete()
-        Course.objects.all().delete()
         with open('ccs_offerings.tsv','r') as ccs_details:
             count = 1
             for l in ccs_details:
@@ -306,7 +304,7 @@ def init(request):
                     faculty = None
                     if(faculty_name != ''):
                         faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
-                    course = Course.objects.get_or_create(course_code=course_code, course_name='', course_desc='', college=ccs[0], units=3)[0]
+                    course = Course.objects.get_or_create(course_code=course_code, college=ccs[0], units=3)[0]
                     section = Section.objects.get_or_create(section_code=section_code)[0]
                     day = Day.objects.get(day_code=d)
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
@@ -316,7 +314,7 @@ def init(request):
                     if(current_enrolled > max_enrolled):
                       current_enrolled = max_enrolled
                     status = True
-                    CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, current_enrolled=current_enrolled,max_enrolled=max_enrolled, status=status)
+                    CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status).update(current_enrolled=current_enrolled).update(max_enrolled=max_enrolled)
                 count += 1
     except Exception as e:
       return HttpResponse(e)
