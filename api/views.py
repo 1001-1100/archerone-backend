@@ -314,7 +314,11 @@ def init(request):
                     if(current_enrolled > max_enrolled):
                       current_enrolled = max_enrolled
                     status = True
-                    CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status).update(current_enrolled=current_enrolled).update(max_enrolled=max_enrolled)
+                    offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+                    for o in offerings:
+                      o.current_enrolled = current_enrolled
+                      o.max_enrolled = max_enrolled
+                      o.save()
                 count += 1
     except Exception as e:
       return HttpResponse(e)
