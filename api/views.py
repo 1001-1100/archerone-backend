@@ -124,9 +124,9 @@ class CoursePriorityList(APIView):
       return Response(None)
 
 class NonFriendList(APIView):
-  def get(self, request, pk, format=None):
+  def get(self, request, pk, user, format=None):
       user = User.objects.get(id=pk)
-      nonFriends = User.objects.all()
+      nonFriends = User.objects.all().exclude(id=user)
       for f in user.friends.all():
         nonFriends = nonFriends.exclude(id=f.id)
       serializer = UserSerializer(nonFriends, many=True)
@@ -142,12 +142,12 @@ class FriendRequestList(APIView):
       return Response(serializer.data)
 
 class FriendList(APIView):
-  def get(self, request, pk, format=None):
+  def get(self, request, pk, user, format=None):
       user = User.objects.get(id=pk)
       friends = User.objects.none()
       for f in user.friends.all():
         friends = friends | User.objects.filter(id=f.id)
-      friends = friends.order_by('first_name', 'last_name')
+      friends = friends.exclude(id=user).order_by('first_name', 'last_name')
       serializer = UserSerializer(friends, many=True)
       for d in serializer.data:
         d['college'] = College.objects.get(id=d['college']).college_name
@@ -155,8 +155,8 @@ class FriendList(APIView):
       return Response(serializer.data)
 
 class SentRequestList(APIView):
-  def get(self, request, pk, format=None):
-      friendRequests = FriendRequest.objects.filter(from_user=pk).exclude(accepted=True)
+  def get(self, request, pk, user, format=None):
+      friendRequests = FriendRequest.objects.filter(from_user=pk).exclude(accepted=True).exclude(from_user=user)
       serializer = FriendRequestSerializer(friendRequests, many=True)
       return Response(serializer.data)
 

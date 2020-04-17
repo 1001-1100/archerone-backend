@@ -6,10 +6,10 @@ def save_friend_request(sender, instance, **kwargs):
 
 def save_schedule(sender, instance, created, **kwargs):
     if(created):
-        for u in instance.user.friends.all():
+        for u in instance.user.friends.all().exclude(id=instance.user.id):
             Notification(content=instance.user.first_name+' saved a new schedule named \''+instance.title+'\'!', seen=False, to_user=u).save()
     else:
-        for u in instance.user.friends.all():
+        for u in instance.user.friends.all().exclude(id=instance.user.id):
             Notification(content=instance.user.first_name+' modified the schedule named \''+instance.title+'\'!', seen=False, to_user=u).save()
 
 # def save_preference(sender, instance, **kwargs):
