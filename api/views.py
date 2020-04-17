@@ -6,6 +6,7 @@ from .models import User, Schedule, FriendRequest, Notification, Course, Degree,
 from .satsolver import solve
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import random
 
 class UserViewSet(viewsets.ModelViewSet):
   serializer_class = UserSerializer
@@ -146,6 +147,7 @@ class FriendList(APIView):
       friends = User.objects.none()
       for f in user.friends.all():
         friends = friends | User.objects.filter(id=f.id)
+      friends = friends.order_by('first_name', 'last_name')
       serializer = UserSerializer(friends, many=True)
       for d in serializer.data:
         d['college'] = College.objects.get(id=d['college']).college_name
@@ -160,7 +162,7 @@ class SentRequestList(APIView):
 
 class SearchCourse(APIView):
   def get(self, request, term, format=None):
-      courses = Course.objects.filter(course_code__icontains=term)
+      courses = Course.objects.filter(course_code__icontains=term).order_by('course_code')
       serializer = CourseSerializer(courses , many=True)
       return Response(serializer.data)
 
@@ -274,6 +276,7 @@ def init(request):
       return HttpResponse(e)
 
     try:
+        CourseOffering.objects.all().delete()
         with open('ccs_offerings.tsv','r') as ccs_details:
             count = 1
             for l in ccs_details:
@@ -307,7 +310,7 @@ def init(request):
                     day = Day.objects.get(day_code=d)
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
                     room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
-                    current_enrolled = 0
+                    current_enrolled = random.randint(0,40)
                     max_enrolled = 40
                     status = True
                     CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, current_enrolled=current_enrolled,max_enrolled=max_enrolled, status=status)
