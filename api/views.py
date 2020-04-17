@@ -277,6 +277,7 @@ def init(request):
 
     try:
         CourseOffering.objects.all().delete()
+        Course.objects.all().delete()
         with open('ccs_offerings.tsv','r') as ccs_details:
             count = 1
             for l in ccs_details:
