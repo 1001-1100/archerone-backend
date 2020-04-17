@@ -147,6 +147,9 @@ class FriendList(APIView):
       for f in user.friends.all():
         friends = friends | User.objects.filter(id=f.id)
       serializer = UserSerializer(friends, many=True)
+      for d in serializer.data:
+        d['college'] = College.objects.get(id=d['college']).college_name
+        d['degree'] = Degree.objects.get(id=d['degree']).degree_name
       return Response(serializer.data)
 
 class SentRequestList(APIView):
