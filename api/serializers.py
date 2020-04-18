@@ -36,7 +36,7 @@ class FacultySerializer(serializers.ModelSerializer):
 class FlowchartTermSerializer(serializers.ModelSerializer):
   class Meta:
     model = FlowchartTerm 
-    fields = ('id', 'degree', 'batch', 'courses', 'year', 'term')
+    fields = ('id', 'degree', 'batch', 'courses', 'tracks', 'year', 'term')
 
 class SectionSerializer(serializers.ModelSerializer):
   class Meta:
