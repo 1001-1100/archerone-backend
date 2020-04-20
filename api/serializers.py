@@ -21,7 +21,7 @@ class DegreeSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Course 
-    fields = ('id', 'course_code', 'course_name', 'course_desc', 'college', 'units', 'prerequisite_to')
+    fields = ('id', 'course_code', 'course_name', 'course_desc', 'college', 'units', 'prerequisite_to', 'soft_prerequisite_to', 'co_requisite')
 
 class FacultySerializer(serializers.ModelSerializer):
   class Meta:
