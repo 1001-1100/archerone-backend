@@ -1,8 +1,11 @@
 from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 
 def save_friend_request(sender, instance, **kwargs):
-    if(instance.accepted):
+    if(instance.accepted and not(instance.notified)):
         Notification(category='Friend', content=instance.to_user.first_name+' accepted your friend request!', seen=False, to_user=instance.from_user).save()
+        instance.notified = True
+        instance.save()
+
 
 def save_schedule(sender, instance, created, **kwargs):
     if(created):

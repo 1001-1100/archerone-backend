@@ -154,7 +154,7 @@ class User(AbstractBaseUser):
     # schedules = models.ManyToManyField(Schedule)
     is_active = models.BooleanField(default=True)
     objects = UserManager()
-    friends = models.ManyToManyField('self')
+    friends = models.ManyToManyField('self', blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'college', 'degree']
@@ -173,6 +173,7 @@ class FriendRequest(models.Model):
     seen = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
+    notified = models.BooleanField(default=False)
 
 class Notification(models.Model):
     content = models.CharField(max_length=500)
