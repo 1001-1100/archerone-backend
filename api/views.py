@@ -182,6 +182,7 @@ class CourseOfferingsList(APIView):
         for d in serializer.data:
           if(d['faculty'] != None):
             d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+          d['course_id'] = d['course']
           d['course'] = Course.objects.get(id=d['course']).course_code
           d['section'] = Section.objects.get(id=d['section']).section_code  
           d['day'] = Day.objects.get(id=d['day']).day_code  
