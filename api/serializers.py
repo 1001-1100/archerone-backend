@@ -86,7 +86,7 @@ class FriendRequestSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Notification 
-    fields = ('id', 'content', 'date', 'seen', 'to_user')
+    fields = ('id', 'content', 'date', 'seen', 'category', 'to_user')
 
 class PreferenceSerializer(serializers.ModelSerializer):
   class Meta:
