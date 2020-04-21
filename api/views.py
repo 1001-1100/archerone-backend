@@ -85,6 +85,7 @@ class SavedScheduleList(APIView):
             print(d2)
             if(d2['faculty'] != None):
               d2['faculty'] = Faculty.objects.get(id=d2['faculty']).full_name
+            d2['course_id'] = d2['course']
             d2['course'] = Course.objects.get(id=d2['course']).course_code
             d2['section'] = Section.objects.get(id=d2['section']).section_code  
             d2['day'] = Day.objects.get(id=d2['day']).day_code  
@@ -212,6 +213,7 @@ class EditSchedule(APIView):
     for d in serializer.data:
       if(d['faculty'] != None):
         d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+      d['course_id'] = d['course']
       d['course'] = Course.objects.get(id=d['course']).course_code
       d['section'] = Section.objects.get(id=d['section']).section_code  
       d['day'] = Day.objects.get(id=d['day']).day_code  
