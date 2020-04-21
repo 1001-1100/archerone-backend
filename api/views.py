@@ -207,7 +207,9 @@ class EditSchedule(APIView):
     schedule = solveEdit(courses, classnumbers)
 
     old_sched = Schedule.objects.get(id=sched_id)
-    old_sched.courseOfferings = schedule
+    old_sched.courseOfferings.clear()
+    for o in schedule:
+      old_sched.courseOfferings.add(o)
     old_sched.save()
 
     serializer = CourseOfferingSerializer(schedule, many=True)
