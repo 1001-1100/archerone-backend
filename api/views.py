@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets          
 from .serializers import CustomRegisterSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
 from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
-from .satsolver import solve
+from .satsolver import solve, solveEdit
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import random
@@ -191,6 +191,30 @@ class CourseOfferingsList(APIView):
         courseData.append(serializer.data)
       return Response(courseData)
 
+class EditSchedule(APIView):
+  def post(self, request, format=None):
+    courses = []
+    classnumbers = []
+    for c in request.data['courses']:
+      courses.append(c)
+    for c in request.data['classnumbers']:
+      classnumbers.append(c)
+    user = request.data['user_id']
+
+    schedule = solveEdit(courses, classnumbers)
+    serializer = CourseOfferingSerializer(schedule, many=True)
+    for d in serializer.data:
+      if(d['faculty'] != None):
+        d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+      d['course'] = Course.objects.get(id=d['course']).course_code
+      d['section'] = Section.objects.get(id=d['section']).section_code  
+      d['day'] = Day.objects.get(id=d['day']).day_code  
+      d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+      d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+      if(d['room'] != None):
+        d['room'] = Room.objects.get(id=d['room']).room_name
+    return Response(serializer.data)
+
 class SchedulesList(APIView):
   def post(self, request, format=None):
     highCourses = []
@@ -204,6 +228,36 @@ class SchedulesList(APIView):
 
     serializedSchedules = []
     schedules = solve(highCourses, lowCourses, preferences)
+    for s in schedules:
+      serializedSchedule = {}
+      serializer = CourseOfferingSerializer(s['offerings'], many=True)
+      for d in serializer.data:
+        if(d['faculty'] != None):
+          d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+        d['course'] = Course.objects.get(id=d['course']).course_code
+        d['section'] = Section.objects.get(id=d['section']).section_code  
+        d['day'] = Day.objects.get(id=d['day']).day_code  
+        d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+        d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+        if(d['room'] != None):
+          d['room'] = Room.objects.get(id=d['room']).room_name
+      serializedSchedule['offerings'] = serializer.data
+      serializedSchedule['information'] = s['information']
+      serializedSchedule['preferences'] = s['preferences']
+      serializedSchedules.append(serializedSchedule)
+    return Response(serializedSchedules)
+
+class EditSchedule(APIView):
+  def post(self, request, format=None):
+    courses = []
+    classnumbers = []
+    for c in request.data['courses']:
+      courses.append(c)
+    for c in request.data['classnumbers']:
+      classnumbers.append(c)
+    user = request.data['user_id']
+
+    schedule = solveEdit(courses, classnumbers)
     for s in schedules:
       serializedSchedule = {}
       serializer = CourseOfferingSerializer(s['offerings'], many=True)

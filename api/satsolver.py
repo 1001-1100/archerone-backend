@@ -231,6 +231,60 @@ def solve(highCourses, lowCourses, preferences):
 
     return schedules 
 
+def solveEdit(classnumbers, courses):
+    def addHardConstraints():
+        for c in courses:
+            offerings = CourseOffering.objects.filter(course=c)
+            for o in offerings:
+                for o2 in offerings:
+                    if(o.section != o2.section):
+                        a = Bool(str(o.classnumber))
+                        b = Not(Bool(str(o2.classnumber)))
+                        z3.add(Implies(a,b))
+            for o in offerings:
+                for o2 in offerings:
+                    if(o.section != o2.section or o.course != o2.course):
+                        if(o.day == o2.day):
+                            if(o.timeslot == o2.timeslot):
+                                a = Bool(str(o.classnumber))
+                                b = Not(Bool(str(o2.classnumber)))
+                                z3.add(Implies(a,b))
+                            else:
+                                firstTime = o.timeslot
+                                secondTime = o2.timeslot
+                                if(firstTime.begin_time >= secondTime.begin_time and firstTime.begin_time <= secondTime.end_time):
+                                    a = Bool(str(o.classnumber))
+                                    b = Not(Bool(str(o2.classnumber)))
+                                    z3.add(Implies(a,b))
+                                elif(firstTime.end_time >= secondTime.begin_time and firstTime.end_time <= secondTime.end_time):
+                                    a = Bool(str(o.classnumber))
+                                    b = Not(Bool(str(o2.classnumber)))
+                                    z3.add(Implies(a,b))
+                                elif(firstTime.end_time >= secondTime.end_time and firstTime.begin_time <= secondTime.end_time):
+                                    a = Bool(str(o.classnumber))
+                                    b = Not(Bool(str(o2.classnumber)))
+                                    z3.add(Implies(a,b))
+    def addSoftConstraints():
+        for c in classnumbers:
+            z3.add_soft(Bool(str(c)))
+
+    z3 = Optimize()
+
+    addHardConstraints()
+    addSoftConstraints()
+
+    z3.check()
+    model = z3.model()
+    offerings = CourseOffering.objects.none() 
+    for o in model:
+        if(model[o]):
+            offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
+
+
+    return offerings 
+
+
+
 # def start(inputCourses, inputProfs, inputNotSections, inputNotRooms, inputNotBefore, inputNotAfter, inputNotDays, inputCheckFull, num):
 
 #     z3 = Optimize()
