@@ -17,8 +17,7 @@ def save_schedule(sender, instance, created, **kwargs):
 
 def save_user(sender, instance, created, **kwargs):
     if(created):
-        user_id = instance.id
-        Preference(user=user_id, earliest_class_time='07:30:00', latest_class_time='21:00:00', break_length=15, min_courses=0, max_courses=10).save()
+        Preference(user=instance, earliest_class_time='07:30:00', latest_class_time='21:00:00', break_length=15, min_courses=0, max_courses=10).save()
 
 # def save_preference(sender, instance, **kwargs):
 #     if(instance.accepted):
