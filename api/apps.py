@@ -12,4 +12,4 @@ class ApiConfig(AppConfig):
         post_save.connect(save_schedule,sender=Schedule)
         post_save.connect(save_user,sender=User)
         post_save.connect(save_preference,sender=Preference)
-        post_save.connect(save_preference,sender=CourseOffering)
+        post_save.connect(save_courseoffering,sender=CourseOffering)
