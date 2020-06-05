@@ -384,8 +384,8 @@ def init(request):
                 classnumber = c['coursenumber']
                 course_code = c['coursecode']
                 section_code = c['section']
-                current_enrolled = int(c['enrollcap'])
-                max_enrolled = int(c['enrolled'])
+                current_enrolled = int(c['enrolled'])
+                max_enrolled = int(c['enrollcap'])
                 faculty_name = '' 
                 if(coursenumber in dataFaculty):
                     faculty_name = dataFaculty[coursenumber]
@@ -401,15 +401,13 @@ def init(request):
                     day = Day.objects.get(day_code=d['day'])
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
                     room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
-                    if(current_enrolled > max_enrolled):
-                      current_enrolled = max_enrolled
                     status = True
                     CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
                     offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
                     for o in offerings:
-                      o.current_enrolled = current_enrolled
-                      o.max_enrolled = max_enrolled
-                      o.save()
+                        o.current_enrolled = current_enrolled
+                        o.max_enrolled = max_enrolled
+                        o.save()
                     print(course_code, section_code, faculty_name, d['day'], time_begin, time_end, room_name, classnumber)
 
         with open('courselist.txt','r') as course_list:
