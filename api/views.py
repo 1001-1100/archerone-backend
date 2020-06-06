@@ -281,17 +281,17 @@ def init(request):
     try:
         # Colleges
         ccs = College.objects.get_or_create(college_code='CCS', college_name='College of Computer Studies')
-        cla = College.objects.get_or_create(college_code='CLA', college_name='College of Liberal Arts')
-        cos = College.objects.get_or_create(college_code='COS', college_name='College of Science')
-        gcoe = College.objects.get_or_create(college_code='GCOE', college_name='Gokongwei College of Engineering')
-        soe = College.objects.get_or_create(college_code='SOE', college_name='School of Economics')
-        bagced = College.objects.get_or_create(college_code='BAGCED', college_name='Br. Andrew Gonzalez College of Education')
-        rvrcob = College.objects.get_or_create(college_code='RVRCOB', college_name='Ramon V. Del Rosario College of Business')
+        # cla = College.objects.get_or_create(college_code='CLA', college_name='College of Liberal Arts')
+        # cos = College.objects.get_or_create(college_code='COS', college_name='College of Science')
+        # gcoe = College.objects.get_or_create(college_code='GCOE', college_name='Gokongwei College of Engineering')
+        # soe = College.objects.get_or_create(college_code='SOE', college_name='School of Economics')
+        # bagced = College.objects.get_or_create(college_code='BAGCED', college_name='Br. Andrew Gonzalez College of Education')
+        # rvrcob = College.objects.get_or_create(college_code='RVRCOB', college_name='Ramon V. Del Rosario College of Business')
         # Degrees
         Degree.objects.get_or_create(degree_code='BS CS', degree_name='Bachelor of Science in Computer Science', college=ccs[0])
-        Degree.objects.get_or_create(degree_code='BS IT', degree_name='Bachelor of Science in Information Technology', college=ccs[0])
-        Degree.objects.get_or_create(degree_code='BS-PSY', degree_name='Bachelor of Science in Psychology', college=cla[0])
-        Degree.objects.get_or_create(degree_code='AB-SOC', degree_name='Bachelor of Arts in Sociology', college=cla[0])
+        # Degree.objects.get_or_create(degree_code='BS IT', degree_name='Bachelor of Science in Information Technology', college=ccs[0])
+        # Degree.objects.get_or_create(degree_code='BS-PSY', degree_name='Bachelor of Science in Psychology', college=cla[0])
+        # Degree.objects.get_or_create(degree_code='AB-SOC', degree_name='Bachelor of Arts in Sociology', college=cla[0])
         # Degree.objects.get_or_create(degree_code='AEI-BSA', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Accountancy', college=soe[0])
         # Degree.objects.get_or_create(degree_code='AEI-ADV', degree_name='Bachelor of Science in Applied Economics, Major in Industrial Economics and Bachelor of Science in Advertising Management', college=soe[0])
         # Buildings
@@ -396,7 +396,7 @@ def init(request):
                     faculty = None
                     if(faculty_name != ''):
                         faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
-                    course = Course.objects.get_or_create(course_code=course_code, college=ccs[0])[0]
+                    course = Course.objects.get_or_create(course_code=course_code)[0]
                     section = Section.objects.get_or_create(section_code=section_code)[0]
                     day = Day.objects.get(day_code=d['day'])
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
