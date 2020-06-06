@@ -34,7 +34,7 @@ class Course(models.Model):
     course_name = models.CharField(max_length=120, blank=True)
     course_desc = models.TextField(blank=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE, null=True)
-    units = models.IntegerField(blank=True)
+    units = models.IntegerField(blank=True, null=True, default=3)
     timestamp = models.DateTimeField(auto_now_add=True)
     # flowchart information
     # flowchart_terms = models.ManyToManyField(FlowchartTerm)
