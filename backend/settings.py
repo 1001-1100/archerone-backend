@@ -182,6 +182,7 @@ ACCOUNT_LOGOUT_ON_GET = True #temp disable
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'https://archerone.herokuapp.com/logout'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'ArcherOne'
 
 AUTH_USER_MODEL = 'api.User'
 
