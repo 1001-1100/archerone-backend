@@ -154,7 +154,7 @@ class User(AbstractBaseUser):
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     # schedules = models.ManyToManyField(Schedule)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     objects = UserManager()
     friends = models.ManyToManyField('self', blank=True)
 
