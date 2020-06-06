@@ -367,7 +367,7 @@ def init(request):
                                 prevCourse = coursenumber
                                 courses.append(course)
                                 for day in rowData[3].strip():
-                                    if prevCourse not in dataTimes:
+                                    if coursenumber not in dataTimes:
                                         dataTimes[coursenumber] = []
                                     time = {
                                         'day':day,
