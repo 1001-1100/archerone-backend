@@ -338,6 +338,20 @@ def init(request):
                             if(len(rowData) == 1):
                                 faculty = rowData[0].strip()
                                 dataFaculty[prevCourse] = faculty
+                            elif(len(rowData) == 2):
+                                times = rowData[1].strip().split(' ')
+                                begintime = times[0][0:2] + ':' + times[0][2:4]
+                                endtime = times[2][0:2] + ':' + times[2][2:4]
+                                for day in rowData[0].strip():
+                                    if prevCourse not in dataTimes:
+                                        dataTimes[prevCourse] = []
+                                    time = {
+                                        'day':day,
+                                        'begintime':begintime,
+                                        'endtime':endtime,
+                                        'room':''
+                                    }
+                                    dataTimes[prevCourse].append(time)
                             elif(len(rowData) == 3):
                                 times = rowData[1].strip().split(' ')
                                 begintime = times[0][0:2] + ':' + times[0][2:4]
@@ -389,7 +403,7 @@ def init(request):
                 faculty_name = '' 
                 if(coursenumber in dataFaculty):
                     faculty_name = dataFaculty[coursenumber]
-                for d in dataTimes[coursenumber]:
+                for d in dataTimes[classnumber]:
                     time_begin = d['begintime'] 
                     time_end= d['endtime']
                     room_name = d['room'].strip()
@@ -408,7 +422,7 @@ def init(request):
                         o.current_enrolled = current_enrolled
                         o.max_enrolled = max_enrolled
                         o.save()
-                    print(course_code, section_code, faculty_name, d['day'], time_begin, time_end, room_name, classnumber)
+                    print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
 
         with open('courselist.txt','r') as course_list:
             for c in course_list:
