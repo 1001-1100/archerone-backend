@@ -396,7 +396,7 @@ def init(request):
                     faculty = None
                     if(faculty_name != ''):
                         faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
-                    course = Course.objects.get_or_create(course_code=course_code, college=ccs[0], units=3)[0]
+                    course = Course.objects.get_or_create(course_code=course_code, college=ccs[0])[0]
                     section = Section.objects.get_or_create(section_code=section_code)[0]
                     day = Day.objects.get(day_code=d['day'])
                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
