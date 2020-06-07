@@ -179,7 +179,7 @@ class CourseOfferingsList(APIView):
   def post(self, request, format=None):
       courseData = []
       for c in request.data['courses']:
-        # retrieveCourse(c)
+        retrieveCourse(c)
         offerings = CourseOffering.objects.filter(course=c)
         serializer = CourseOfferingSerializer(offerings, many=True)
         for d in serializer.data:
@@ -277,6 +277,11 @@ class FlowchartTermsList(APIView):
           courses.append(d2)
         d['courses'] = courses
       return Response(serializer.data)
+
+class RetrieveCourse(APIView):
+  def get(self, request, term, format=None):
+      retrieveCourse(term)
+      return HttpResponse(term)
 
 def retrieveCourse(c):
   course = Course.objects.filter(course_code=c.strip())
