@@ -151,9 +151,9 @@ def checkPreferences(z3, model, preferences):
                 if(p.preferred_buildings != None):
                     pass
                 if(p.preferred_sections != None):
-                    section_id = p.preferred_sections.id
+                    section_code = p.preferred_sections.section_code
                     for o in offerings:
-                        if(section_id != o.section.id):
+                        if(section_code not in o.section.section_code):
                             unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
                 if(p.preferred_faculty != None):
                     faculty_id = p.preferred_faculty.id
