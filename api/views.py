@@ -401,8 +401,8 @@ def init(request):
                 current_enrolled = int(c['enrolled'])
                 max_enrolled = int(c['enrollcap'])
                 faculty_name = '' 
-                if(coursenumber in dataFaculty):
-                    faculty_name = dataFaculty[coursenumber]
+                if(classnumber in dataFaculty):
+                    faculty_name = dataFaculty[classnumber]
                 for d in dataTimes[classnumber]:
                     time_begin = d['begintime'] 
                     time_end= d['endtime']
