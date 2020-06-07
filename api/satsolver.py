@@ -86,7 +86,10 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
             print(p.preferred_buildings)
         if(p.preferred_sections != None):
             section_code = p.preferred_sections.section_code
+            print(section_code)
             for o in allOfferings:
+                print(o.section_code)
+                print(type(section_code))
                 if(str(section_code) in str(o.section_code)):
                     z3.add_soft(Bool(str(o.classnumber)))
         if(p.preferred_faculty != None):
