@@ -41,6 +41,7 @@ webencodings = "==0.5.1"
 whitenoise = "==5.0.1"
 z3-solver = "==4.8.7.0"
 django = "*"
+celery = "*"
 
 [dev-packages]
 
