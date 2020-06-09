@@ -3,7 +3,7 @@ from z3 import *
 from .models import CourseOffering, Course, Timeslot
 
 
-def addHardConstraints(z3, highCourses, lowCourses):
+def addHardConstraints(z3, highCourses, lowCourses, filterFull):
     allOfferings = CourseOffering.objects.none()
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
@@ -24,6 +24,10 @@ def addHardConstraints(z3, highCourses, lowCourses):
                     b = Not(Bool(str(o2.classnumber)))
                     z3.add(Implies(a,b))
     for o in allOfferings:
+        if(filterFull):
+            if(o.current_enrolled >= o.max_enrolled):
+                a = Not(Bool(str(o.classnumber)))
+                z3.add(a)
         for o2 in allOfferings:
             if(o.section != o2.section or o.course != o2.course):
                 if(o.day == o2.day):
@@ -185,10 +189,10 @@ def addExtraConstraints(z3, model):
             current.append((Not(Bool(str(o)))))
     z3.add(Or(tuple(current)))
 
-def solve(highCourses, lowCourses, preferences):
+def solve(highCourses, lowCourses, preferences, filterFull):
     z3 = Optimize()
 
-    addHardConstraints(z3, highCourses, lowCourses)
+    addHardConstraints(z3, highCourses, lowCourses, filterFull)
     addSoftConstraints(z3, highCourses, lowCourses)
     otherPreferences = addPreferences(z3, highCourses, lowCourses, preferences)
 
