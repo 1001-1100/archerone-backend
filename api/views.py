@@ -524,32 +524,54 @@ def init(request):
                     faculty_name = '' 
                     if(classnumber in dataFaculty):
                         faculty_name = dataFaculty[classnumber]
-                    for d in dataTimes[classnumber]:
-                        time_begin = d['begintime'] 
-                        time_end= d['endtime']
-                        room_name = d['room'].strip()
+                    if(classnumber in dataTimes):
+                        for d in dataTimes[classnumber]:
+                            time_begin = d['begintime'] 
+                            time_end= d['endtime']
+                            room_name = d['room'].strip()
+                            faculty = None
+                            if(faculty_name != ''):
+                                faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
+                            course = Course.objects.get_or_create(course_code=course_code)[0]
+                            section = Section.objects.get_or_create(section_code=section_code)[0]
+                            day = Day.objects.get(day_code=d['day'])
+                            timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
+                            room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
+                            status = True
+                            CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+                            offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+                            for o in offerings:
+                                o.current_enrolled = current_enrolled
+                                o.max_enrolled = max_enrolled
+                                o.save()
+                            print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
+                    else:
+                        time_begin = '00:00'
+                        time_end = '00:00'
+                        room_name = ''
                         faculty = None
                         if(faculty_name != ''):
                             faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
                         course = Course.objects.get_or_create(course_code=course_code)[0]
                         section = Section.objects.get_or_create(section_code=section_code)[0]
-                        day = Day.objects.get(day_code=d['day'])
                         timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
                         room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
                         status = True
-                        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
-                        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+                        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
+                        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
                         for o in offerings:
                             o.current_enrolled = current_enrolled
                             o.max_enrolled = max_enrolled
                             o.save()
-                        print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
+                        print(course_code, section_code, faculty_name, room_name, classnumber)
 
-            with open('courselist.txt','r') as course_list:
-                for c in course_list:
-                    retrieveCourse(c.rstrip())
         except Exception as e:
             print(e)
-            return HttpResponse(e)
+        with open('courselist.txt','r') as course_list:
+            for c in course_list:
+                try:
+                    retrieveCourse(c.rstrip())
+                except Exception as e:
+                  print(e)
     _thread.start_new_thread(start_init,())
     return HttpResponse('Adrienne Soliven is cute <3')
