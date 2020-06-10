@@ -5,8 +5,10 @@ from .models import CourseOffering, Course, Timeslot
 
 def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings):
     allOfferings = CourseOffering.objects.none()
+    classNumbers = []
     for o in courseOfferings:
         print(o)
+        classNumbers.append(str(o['classNmbr']))
         a = Bool(str(o['classNmbr']))
         z3.add(a)
     for c in highCourses:
@@ -30,8 +32,9 @@ def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings)
     for o in allOfferings:
         if(filterFull):
             if(o.current_enrolled >= o.max_enrolled):
-                a = Not(Bool(str(o.classnumber)))
-                z3.add(a)
+                if(str(o.classnumber) not in classNumbers):
+                    a = Not(Bool(str(o.classnumber)))
+                    z3.add(a)
         for o2 in allOfferings:
             if(o.section != o2.section or o.course != o2.course):
                 if(o.day == o2.day):
