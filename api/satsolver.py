@@ -6,7 +6,8 @@ from .models import CourseOffering, Course, Timeslot
 def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings):
     allOfferings = CourseOffering.objects.none()
     for o in courseOfferings:
-        a = Bool(str(o.classNmbr))
+        print(o)
+        a = Bool(str(o.classnumber))
         z3.add(a)
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
