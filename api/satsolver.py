@@ -7,7 +7,7 @@ def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings)
     allOfferings = CourseOffering.objects.none()
     for o in courseOfferings:
         print(o)
-        a = Bool(str(o.classnumber))
+        a = Bool(str(o['classNmbr']))
         z3.add(a)
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
