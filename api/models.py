@@ -12,6 +12,7 @@ import datetime
 
 class College(models.Model):
     college_code = models.CharField(max_length=12, unique=True)
+    section_code = models.CharField(max_length=12, unique=True, null=True, blank=True)
     college_name = models.CharField(max_length=120, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
