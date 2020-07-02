@@ -181,11 +181,8 @@ class CourseOfferingsList(APIView):
       courseData = []
       user = request.data['user_id']
       preferences = Preference.objects.filter(user=user)
-      for c in request.data['courses']:
-        if(request.data['applyPreference']):
-          offerings = search([c], preferences)
-        else:
-          offerings = CourseOffering.objects.filter(course=c)
+      if(request.data['applyPreference']):
+        offerings = search(request.data['courses'], preferences)
         serializer = CourseOfferingSerializer(offerings, many=True)
         for d in serializer.data:
           if(d['faculty'] != None):
@@ -200,6 +197,23 @@ class CourseOfferingsList(APIView):
           if(d['room'] != None):
             d['room'] = Room.objects.get(id=d['room']).room_name
         courseData.append(serializer.data)
+      else:
+        for c in request.data['courses']:
+          offerings = CourseOffering.objects.filter(course=c)
+          serializer = CourseOfferingSerializer(offerings, many=True)
+          for d in serializer.data:
+            if(d['faculty'] != None):
+              d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+            d['classnumber'] = d['classnumber']
+            d['course_id'] = d['course']
+            d['course'] = Course.objects.get(id=d['course']).course_code
+            d['section'] = Section.objects.get(id=d['section']).section_code  
+            d['day'] = Day.objects.get(id=d['day']).day_code  
+            d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+            d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+            if(d['room'] != None):
+              d['room'] = Room.objects.get(id=d['room']).room_name
+          courseData.append(serializer.data)
       return Response(courseData)
 
 class EditSchedule(APIView):
