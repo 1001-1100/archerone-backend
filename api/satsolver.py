@@ -198,6 +198,24 @@ def addExtraConstraints(z3, model):
             current.append((Not(Bool(str(o)))))
     z3.add(Or(tuple(current)))
 
+def search(courses, preferences):
+    z3 = Optimize()
+
+    addHardConstraints(z3, courses, [], False, [])
+    addSoftConstraints(z3, courses, [])
+    otherPreferences = addPreferences(z3, courses, [], preferences)
+
+    schedules = []
+
+    z3.check()
+    model = z3.model()
+    offerings = CourseOffering.objects.none() 
+    for o in model:
+        if(model[o]):
+            offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
+
+    return offerings
+
 def solve(highCourses, lowCourses, preferences, filterFull, courseOfferings):
     z3 = Optimize()
 

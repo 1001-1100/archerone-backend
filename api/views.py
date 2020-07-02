@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets          
 from .serializers import CustomRegisterSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
 from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
-from .satsolver import solve, solveEdit
+from .satsolver import solve, solveEdit, search
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import random
@@ -179,8 +179,13 @@ class NotificationList(APIView):
 class CourseOfferingsList(APIView):
   def post(self, request, format=None):
       courseData = []
+      user = request.data['user_id']
+      preferences = Preference.objects.filter(user=user)
       for c in request.data['courses']:
-        offerings = CourseOffering.objects.filter(course=c)
+        if(request.data['applyPreference']):
+          offerings = search([c], preferences)
+        else:
+          offerings = CourseOffering.objects.filter(course=c)
         serializer = CourseOfferingSerializer(offerings, many=True)
         for d in serializer.data:
           if(d['faculty'] != None):
