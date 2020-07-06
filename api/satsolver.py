@@ -202,7 +202,7 @@ def search(courses, preferences):
     z3 = Optimize()
 
     # addHardConstraints(z3, courses, [], False, [])
-    # addSoftConstraints(z3, courses, [])
+    addSoftConstraints(z3, [], courses)
     otherPreferences = addPreferences(z3, courses, [], preferences)
 
     schedules = []
