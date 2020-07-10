@@ -139,6 +139,8 @@ def checkPreferences(z3, model, preferences):
     for o in model:
         if(model[o]):
             offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            days = []
+            sections = []
             for p in preferences:
                 if(p.earliest_class_time != None):
                     earliest = p.earliest_class_time
@@ -152,16 +154,18 @@ def checkPreferences(z3, model, preferences):
                             unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts later than '+str(latest))
                 if(p.preferred_days != None):
                     day_id = p.preferred_days.id
-                    for o in offerings:
-                        if(day_id != o.day.id):
-                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
+                    days.append(day_id)
+                    # for o in offerings:
+                    #     if(day_id != o.day.id):
+                            # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
                 if(p.preferred_buildings != None):
                     pass
                 if(p.preferred_sections != None):
                     section_code = p.preferred_sections.section_code
-                    for o in offerings:
-                        if(section_code not in o.section.section_code):
-                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
+                    sections.append(section_code)
+                    # for o in offerings:
+                        # if(section_code not in o.section.section_code):
+                            # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
                 if(p.preferred_faculty != None):
                     faculty_id = p.preferred_faculty.id
                     for o in offerings:
@@ -175,13 +179,23 @@ def checkPreferences(z3, model, preferences):
                     max_courses = p.max_courses
                 if(p.break_length != None):
                     break_length = p.break_length
+            for o in offerings::
+                if(o.day.id not in days):
+                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
+                sectionSatisfied = False
+                sections.map(s => {
+                    if(s in o.section.section_code):
+                        sectionSatisfied = True
+                })
+                if(not sectionSatisfied):
+                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
+
+
     if(min_courses != None):
         if(int(min_courses) > len(allOfferings)/2):
-            print("boop")
             unsatisfied.append('Number of courses are less than '+str(min_courses))
     if(max_courses != None):
         if(int(max_courses) < len(allOfferings)/2):
-            print("beep")
             unsatisfied.append('Number of courses are more than '+str(max_courses))
     return unsatisfied
 
