@@ -179,14 +179,13 @@ def checkPreferences(z3, model, preferences):
                     max_courses = p.max_courses
                 if(p.break_length != None):
                     break_length = p.break_length
-            for o in offerings::
+            for o in offerings:
                 if(o.day.id not in days):
                     unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
                 sectionSatisfied = False
-                sections.map(s => {
+                for s in sections:
                     if(s in o.section.section_code):
                         sectionSatisfied = True
-                })
                 if(not sectionSatisfied):
                     unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
 
