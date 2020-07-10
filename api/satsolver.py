@@ -153,8 +153,8 @@ def checkPreferences(z3, model, preferences):
                         if(latest < o.timeslot.end_time):
                             unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts later than '+str(latest))
                 if(p.preferred_days != None):
-                    day_id = p.preferred_days.id
-                    days.append(day_id)
+                    day = p.preferred_days.id
+                    days.append(day)
                     # for o in offerings:
                     #     if(day_id != o.day.id):
                             # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
@@ -179,15 +179,15 @@ def checkPreferences(z3, model, preferences):
                     max_courses = p.max_courses
                 if(p.break_length != None):
                     break_length = p.break_length
-            # for o in offerings:
-            #     if(o.day.id not in days):
-            #         unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day ('+str(p.preferred_days.day_code)+')')
-            #     sectionSatisfied = False
-            #     for s in sections:
-            #         if(s in o.section.section_code):
-            #             sectionSatisfied = True
-            #     if(not sectionSatisfied):
-            #         unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(p.preferred_sections.section_code)+')')
+            for o in offerings:
+                if(o.day.id not in days):
+                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
+                sectionSatisfied = False
+                for s in sections:
+                    if(s in o.section.section_code):
+                        sectionSatisfied = True
+                if(not sectionSatisfied):
+                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(s)+')')
 
 
     if(min_courses != None):
