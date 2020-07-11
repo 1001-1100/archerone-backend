@@ -186,8 +186,8 @@ def checkPreferences(z3, model, preferences):
                 for s in sections:
                     if(s in o.section.section_code):
                         sectionSatisfied = True
-                if(not sectionSatisfied):
-                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(s)+')')
+                # if(not sectionSatisfied):
+                    # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section ('+str(s)+')')
 
 
     if(min_courses != None):
