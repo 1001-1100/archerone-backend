@@ -231,7 +231,7 @@ class EditSchedule(APIView):
 
     old_sched = Schedule.objects.get(id=sched_id)
     old_sched.courseOfferings.clear()
-    for o in schedule:
+    for o in schedule['offerings']:
       old_sched.courseOfferings.add(o)
     old_sched.save()
 
