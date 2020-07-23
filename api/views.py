@@ -235,7 +235,7 @@ class EditSchedule(APIView):
       old_sched.courseOfferings.add(o)
     old_sched.save()
 
-    serializer = CourseOfferingSerializer(schedule, many=True)
+    serializer = CourseOfferingSerializer(schedule['offerings'], many=True)
     for d in serializer.data:
       if(d['faculty'] != None):
         d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
@@ -247,7 +247,12 @@ class EditSchedule(APIView):
       d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
       if(d['room'] != None):
         d['room'] = Room.objects.get(id=d['room']).room_name
-    return Response(serializer.data)
+
+    serializedSchedule = {}
+    serializedSchedule['offerings'] = serializer.data
+    serializedSchedule['rejected'] = schedule['rejected']
+
+    return Response(serializedSchedule)
 
 class SchedulesList(APIView):
   def post(self, request, format=None):

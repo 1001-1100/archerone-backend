@@ -321,8 +321,22 @@ def solveEdit(classnumbers, courses):
         if(model[o]):
             offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
 
+    schedule = {}
+    selectedCourses = []
+    rejected = []
 
-    return offerings 
+    for o in offerings:
+        selectedCourses.append(o.course.course_code)
+    selectedCourses = set(selectedCourses)
+
+    for c in courses:
+        if not (c in selectedCourses):
+            rejected.append(c)
+
+    schedule['offerings'] = offerings
+    schedule['rejected'] = set(rejected)
+
+    return schedule 
 
 
 
