@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 import random
 import requests
 from bs4 import BeautifulSoup
+from random import *
 import _thread
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -600,5 +601,23 @@ def init(request):
                     retrieveCourse(c.rstrip())
                 except Exception as e:
                   print(e)
+    _thread.start_new_thread(start_init,())
+    return HttpResponse('Adrienne Soliven is cute <3')
+
+def randEnlist(request):
+    def start_init():
+      all_courseofferings = CourseOffering.objects.all()
+      for o in all_courseofferings:
+        o.current_enrolled = randint(0, o.max_enrolled) 
+        o.save()
+    _thread.start_new_thread(start_init,())
+    return HttpResponse('Adrienne Soliven is cute <3')
+
+def emptyEnlist(request):
+    def start_init():
+      all_courseofferings = CourseOffering.objects.all()
+      for o in all_courseofferings:
+        o.current_enrolled = 0 
+        o.save()
     _thread.start_new_thread(start_init,())
     return HttpResponse('Adrienne Soliven is cute <3')
