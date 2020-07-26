@@ -91,7 +91,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 class PreferenceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Preference
-    fields = ('id', 'earliest_class_time', 'latest_class_time', 'preferred_days', 'break_length', 'min_courses', 'max_courses', 'preferred_faculty', 'preferred_buildings', 'preferred_sections', 'user')
+    fields = ('id', 'earliest_class_time', 'latest_class_time', 'preferred_days', 'break_length', 'min_courses', 'max_courses', 'preferred_faculty', 'preferred_buildings', 'preferred_sections', 'undesirable_classes', 'user')
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
