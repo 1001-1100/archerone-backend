@@ -55,14 +55,18 @@ def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings)
                             z3.add(Implies(a,b))
 
 def addSoftConstraints(z3, highCourses, lowCourses):
+    currentPriority = 2
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
         for o in offerings:
-            z3.add_soft(Bool(str(o.classnumber)), 2) 
+            z3.add_soft(Bool(str(o.classnumber)), currentPriority) 
+        currentPriority -= 0.001
+    currentPriority = 1
     for c in lowCourses:
         offerings = CourseOffering.objects.filter(course=c)
         for o in offerings:
-            z3.add_soft(Bool(str(o.classnumber)))
+            z3.add_soft(Bool(str(o.classnumber)), currentPriority)
+        currentPriority -= 0.001
 
 def addPreferences(z3, highCourses, lowCourses, preferences):
     allOfferings = CourseOffering.objects.none()
