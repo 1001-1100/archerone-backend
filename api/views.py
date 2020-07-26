@@ -608,7 +608,7 @@ def randEnlist(request):
     def start_init():
       all_courseofferings = CourseOffering.objects.all()
       for o in all_courseofferings:
-        o.current_enrolled = randint(0, o.max_enrolled) 
+        o.current_enrolled = randint(0, o.max_enrolled + 1) 
         o.save()
     _thread.start_new_thread(start_init,())
     return HttpResponse('Adrienne Soliven is cute <3')
