@@ -11,7 +11,7 @@ from django.contrib.auth.forms import PasswordResetForm
 class CollegeSerializer(serializers.ModelSerializer):
   class Meta:
     model = College 
-    fields = ('id', 'college_code', 'section_code', 'college_name')
+    fields = ('id', 'college_code', 'college_name')
 
 class DegreeSerializer(serializers.ModelSerializer):
   class Meta:
