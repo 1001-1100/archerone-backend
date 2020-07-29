@@ -162,20 +162,19 @@ class FriendList(APIView):
 class CourseInfo(APIView):
   def get(self, request, pk, format=None):
       course = Course.objects.get(id=pk)
-      prereq = ''
-      soft_pre = ''
-      co_req = ''
+      prereq = []
+      soft_pre = []
+      co_req = []
       for c in course.prerequisite_to.all():
-        prereq =+ Course.objects.get(id=c).course_code + ' '
+        prereq.append(Course.objects.get(id=c).course_code)
       for c in course.soft_prerequisite_to.all():
-        soft_pre =+ Course.objects.get(id=c).course_code + ' '
+        soft_pre.append(Course.objects.get(id=c).course_code)
       for c in course.co_requisite.all():
-        co_req =+ Course.objects.get(id=c).course_code + ' '
+        co_req.append(Course.objects.get(id=c).course_code)
       serializer = CourseSerializer(course)
-      for d in serializer.data:
-        d['prerequisite_to'] = prereq
-        d['soft_prerequisite_to'] = soft_pre
-        d['co_requisite'] = co_req
+      serializer.data['prerequisite_to'] = prereq
+      serializer.data['soft_prerequisite_to'] = soft_pre
+      serializer.data['co_requisite'] = co_req
       return Response(serializer.data)
 
 class SentRequestList(APIView):
