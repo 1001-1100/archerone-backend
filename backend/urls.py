@@ -38,6 +38,7 @@ urlpatterns = [
     path('api/friendlist/<int:pk>/', views.FriendList.as_view()),     
     path('api/searchcourse/<slug:term>/', views.SearchCourse.as_view()),     
     path('api/friendrequestlist/<int:pk>/', views.FriendRequestList.as_view()),     
+    path('api/courseinfo/<int:pk>/', views.CourseInfo.as_view()),     
     path('api/sentrequestlist/<int:pk>/', views.SentRequestList.as_view()),     
     path('api/nonfriendlist/<int:pk>/', views.NonFriendList.as_view()),     
     path('api/notificationlist/<int:pk>/', views.NotificationList.as_view()),     

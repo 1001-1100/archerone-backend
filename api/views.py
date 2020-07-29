@@ -159,6 +159,25 @@ class FriendList(APIView):
         d['degree'] = Degree.objects.get(id=d['degree']).degree_name
       return Response(serializer.data)
 
+class CourseInfo(APIView):
+  def get(self, request, pk, format=None):
+      course = Course.objects.get(id=pk)
+      prereq = []
+      soft_pre = []
+      co_req = []
+      for c in course.prerequisite_to.all():
+        prereq.append(c.course_code)
+      for c in course.soft_prerequisite_to.all():
+        soft_pre.append(c.course_code)
+      for c in course.co_requisite.all():
+        co_req.append(c.course_code)
+      serializer = CourseSerializer(course)
+      for d in serializer.data:
+        d['prerequisite_to'] = prereq
+        d['soft_prerequisite_to'] = soft_pre
+        d['co_requisite'] = co_req
+      return Response(serializer.data)
+
 class SentRequestList(APIView):
   def get(self, request, pk, format=None):
       friendRequests = FriendRequest.objects.filter(from_user=pk).exclude(accepted=True)
