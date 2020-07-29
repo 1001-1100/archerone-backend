@@ -166,11 +166,11 @@ class CourseInfo(APIView):
       soft_pre = ''
       co_req = ''
       for c in course.prerequisite_to.all():
-        prereq =+ Course.objects.get(id=c).course_code) + ' '
+        prereq =+ Course.objects.get(id=c).course_code + ' '
       for c in course.soft_prerequisite_to.all():
-        soft_pre =+ Course.objects.get(id=c).course_code) + ' '
+        soft_pre =+ Course.objects.get(id=c).course_code + ' '
       for c in course.co_requisite.all():
-        co_req =+ Course.objects.get(id=c).course_code) + ' '
+        co_req =+ Course.objects.get(id=c).course_code + ' '
       serializer = CourseSerializer(course)
       for d in serializer.data:
         d['prerequisite_to'] = prereq
