@@ -172,9 +172,10 @@ class CourseInfo(APIView):
       for c in course.co_requisite.all():
         co_req.append(Course.objects.get(id=c.id).course_code)
       serializer = CourseSerializer(course)
-      serializer.data['prerequisite_to'] = "prereq" 
-      serializer.data['soft_prerequisite_to'] = soft_pre
-      serializer.data['co_requisite'] = co_req
+      for d in serializer.data:
+        d['prerequisite_to'] = prereq 
+        d['soft_prerequisite_to'] = soft_pre
+        d['co_requisite'] = co_req
       return Response(serializer.data)
 
 class SentRequestList(APIView):
