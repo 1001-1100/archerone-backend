@@ -45,7 +45,7 @@ urlpatterns = [
     path('api/schedulelist/<int:pk>/', views.SavedScheduleList.as_view()),     
     path('api/courseprioritylist/<int:pk>/', views.CoursePriorityList.as_view()),     
     path('api/courseofferingslist/', views.CourseOfferingsList.as_view()),     
-    path('api/courseofferingslistsingle/<slug:term>', views.CourseOfferingsListSingle.as_view()),     
+    path('api/courseofferingslistsingle/<slug:term>/', views.CourseOfferingsListSingle.as_view()),     
     path('api/flowcharttermslist/<int:pk>/<int:pk2>/', views.FlowchartTermsList.as_view()),    
     path('api/auth/', include('rest_auth.urls')),                
     path('api/auth/registration/', include('rest_auth.registration.urls')),                
