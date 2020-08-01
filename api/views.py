@@ -242,7 +242,8 @@ class CourseOfferingsList(APIView):
 class CourseOfferingsListSingle(APIView):
   def get(self, request, term, format=None):
     courseData = []
-    offerings = CourseOffering.objects.filter(course=term)
+    course = Course.objects.get(course_code=term)
+    offerings = CourseOffering.objects.filter(course=course.id)
     serializer = CourseOfferingSerializer(offerings, many=True)
     for d in serializer.data:
       if(d['faculty'] != None):
