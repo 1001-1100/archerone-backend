@@ -1,0 +1,12 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Hooray! You've just registere for an AnimoSched account. Now you can make use of make use of the AnimoSched system to create your academic schedules hassle-free! {% endblocktrans %}<br/><br/>
+
+{% trans "Before we get started, please verify your email at this link:  %}<br/>
+{% block reset_link %}
+{{ protocol }}://archerone.herokuapp.com{% url 'activate_url' %}
+{% endblock %}<br/><br/>
+{% trans "From all of us at ArcherOne, thank you for using our site, and happy schedule creation!" %}
+<br/><br/>
+{% blocktrans %}The ArcherOne team{% endblocktrans %}
+
+{% endautoescape %}
