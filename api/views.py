@@ -320,8 +320,8 @@ class EditSchedule(APIView):
 
 class CheckConflicts(APIView):
   def post(self, request, format=None):
-    result = checkConflicts(request.data['classnumbers'])
-    return Response(result)
+    # result = checkConflicts(request.data['classnumbers'])
+    return Response("Hello")
 
 class SchedulesList(APIView):
   def post(self, request, format=None):
