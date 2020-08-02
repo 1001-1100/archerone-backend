@@ -321,7 +321,7 @@ class EditSchedule(APIView):
 class CheckConflicts(APIView):
   def post(self, request, format=None):
     result = checkConflicts(request.data['classnumbers'])
-    if(result == 'sat'):
+    if(str(result) == 'sat'):
       return Response(True)
     else:
       return Response(False)
