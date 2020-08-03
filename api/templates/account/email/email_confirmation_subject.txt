@@ -1,1 +1,6 @@
-2 Welcome to AnimoSched!
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}
+Welcome to AnimoSched!
+{% endblocktrans %}
+{% endautoescape %}

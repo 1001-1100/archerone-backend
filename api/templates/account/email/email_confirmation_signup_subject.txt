@@ -1,1 +1,1 @@
-3 Welcome to AnimoSched!
+{% include "account/email/email_confirmation_subject.txt" %}
