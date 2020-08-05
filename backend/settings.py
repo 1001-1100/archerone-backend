@@ -62,12 +62,16 @@ if(IS_LOCAL):
     EMAIL_HOST_USER = 'archerone.testing@gmail.com'
     EMAIL_HOST_PASSWORD = 'ARCHER1:D'
     DEFAULT_FROM_EMAIL = 'archerone.testing@gmail.com'
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = '[nothing.] '
+    EMAIL_SUBJECT_PREFIX = '[nothing2.] '
 else:
     EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
     EMAIL_HOST= 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = '[nothing.] '
+    EMAIL_SUBJECT_PREFIX = '[nothing2.] '
 
 SITE_ID = 1
 
@@ -182,8 +186,6 @@ ACCOUNT_LOGOUT_ON_GET = True #temp disable
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'https://archerone.herokuapp.com/logout'
-ACCOUNT_EMAIL_SUBJECT_PREFIX = '[nothing.] '
-EMAIL_SUBJECT_PREFIX = '[nothing2.] '
 
 AUTH_USER_MODEL = 'api.User'
 
