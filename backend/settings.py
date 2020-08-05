@@ -15,6 +15,11 @@ import datetime
 import dj_database_url
 import django_heroku
 
+import mimetypes
+
+mimetypes.add_type("image/svg+xml", ".svg", True)
+mimetypes.add_type("image/svg+xml", ".svgz", True)
+
 IS_LOCAL = False 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
