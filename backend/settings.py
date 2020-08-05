@@ -15,11 +15,6 @@ import datetime
 import dj_database_url
 import django_heroku
 
-import mimetypes
-
-mimetypes.add_type("image/svg+xml", ".svg", True)
-mimetypes.add_type("image/svg+xml", ".svgz", True)
-
 IS_LOCAL = False 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -187,7 +182,7 @@ ACCOUNT_LOGOUT_ON_GET = True #temp disable
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'https://archerone.herokuapp.com/logout'
-ACCOUNT_EMAIL_SUBJECT_PREFIX = '[AnimoSched] '
+# ACCOUNT_EMAIL_SUBJECT_PREFIX = '[AnimoSched] '
 
 AUTH_USER_MODEL = 'api.User'
 
