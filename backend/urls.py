@@ -54,8 +54,8 @@ urlpatterns = [
     path('api/auth/registration/', include('allauth.urls')),                
     # path('api/auth/registration/account-confirm-email/', VerifyEmailView.as_view(),
     # name='account_email_verification_sent'),
-    path('api/auth/registration/account-confirm-email/(?P<key>\w+)/', views.GetClass.as_view(), name="custom_account_confirm_email"),
-    # name='account_confirm_email'),
+    url(r'^verify-email/(?P<key>\w+)/$', views.GetClass.as_view(), name="account_confirm_email")
+    # path('api/auth/registration/account-confirm-email/(?P<key>\w+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
     path('api/refresh-token/', refresh_jwt_token),
     # path('', include('django.contrib.auth.urls')),                
     path('accounts/', include('allauth.urls')),                
