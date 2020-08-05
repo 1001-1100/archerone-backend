@@ -62,16 +62,15 @@ if(IS_LOCAL):
     EMAIL_HOST_USER = 'archerone.testing@gmail.com'
     EMAIL_HOST_PASSWORD = 'ARCHER1:D'
     DEFAULT_FROM_EMAIL = 'archerone.testing@gmail.com'
-    ACCOUNT_EMAIL_SUBJECT_PREFIX = '[nothing.] '
-    EMAIL_SUBJECT_PREFIX = '[nothing2.] '
 else:
     EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
-    EMAIL_HOST= 'smtp.sendgrid.net'
+    EMAIL_HOST = 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
-    ACCOUNT_EMAIL_SUBJECT_PREFIX = '[nothing.] '
-    EMAIL_SUBJECT_PREFIX = '[nothing2.] '
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[AnimoSched] '
+EMAIL_SUBJECT_PREFIX = '[AnimoSched] '
 
 SITE_ID = 1
 
