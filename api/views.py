@@ -501,12 +501,12 @@ def init(request):
         try:
             # Colleges
             ccs = College.objects.get_or_create(college_code='CCS', college_name='College of Computer Studies')
-            # cla = College.objects.get_or_create(college_code='CLA', college_name='College of Liberal Arts')
-            # cos = College.objects.get_or_create(college_code='COS', college_name='College of Science')
-            # gcoe = College.objects.get_or_create(college_code='GCOE', college_name='Gokongwei College of Engineering')
-            # soe = College.objects.get_or_create(college_code='SOE', college_name='School of Economics')
-            # bagced = College.objects.get_or_create(college_code='BAGCED', college_name='Br. Andrew Gonzalez College of Education')
-            # rvrcob = College.objects.get_or_create(college_code='RVRCOB', college_name='Ramon V. Del Rosario College of Business')
+            cla = College.objects.get_or_create(college_code='CLA', college_name='College of Liberal Arts')
+            cos = College.objects.get_or_create(college_code='COS', college_name='College of Science')
+            gcoe = College.objects.get_or_create(college_code='GCOE', college_name='Gokongwei College of Engineering')
+            soe = College.objects.get_or_create(college_code='SOE', college_name='School of Economics')
+            bagced = College.objects.get_or_create(college_code='BAGCED', college_name='Br. Andrew Gonzalez College of Education')
+            rvrcob = College.objects.get_or_create(college_code='RVRCOB', college_name='Ramon V. Del Rosario College of Business')
             # Degrees
             Degree.objects.get_or_create(degree_code='BS CS', degree_name='Bachelor of Science in Computer Science', college=ccs[0])
             # Degree.objects.get_or_create(degree_code='BS IT', degree_name='Bachelor of Science in Information Technology', college=ccs[0])
@@ -533,145 +533,145 @@ def init(request):
         except Exception as e:
             return HttpResponse(e)
 
-        try:
-            def retrieveCourse(c):
-                courses = []
-                dataTimes = {}
-                dataFaculty = {}
-                if(c.strip() != ''):
-                    URL = "http://enroll.dlsu.edu.ph/dlsu/view_actual_count"
-                    PARAMS = {'p_course_code':c}
-                    print("Retrieving data for "+c+"...")
+        # try:
+        #     def retrieveCourse(c):
+        #         courses = []
+        #         dataTimes = {}
+        #         dataFaculty = {}
+        #         if(c.strip() != ''):
+        #             URL = "http://enroll.dlsu.edu.ph/dlsu/view_actual_count"
+        #             PARAMS = {'p_course_code':c}
+        #             print("Retrieving data for "+c+"...")
                     
-                    try:
-                        r = requests.post(url = URL, params = PARAMS)
-                    except:
-                        return "Request encountered an error."
+        #             try:
+        #                 r = requests.post(url = URL, params = PARAMS)
+        #             except:
+        #                 return "Request encountered an error."
 
-                    if(r.status_code == 200):
-                        parsed = BeautifulSoup(r.text, "html5lib").center
-                        rows = parsed.find_all("tr")
-                        prevCourse = None
-                        if(len(rows) > 1):
-                            for row in rows[1:]:
-                                rowData = row.get_text().strip().split("\n")
-                                if(len(rowData) == 1):
-                                    faculty = rowData[0].strip()
-                                    dataFaculty[prevCourse] = faculty
-                                elif(len(rowData) == 2):
-                                    times = rowData[1].strip().split(' ')
-                                    begintime = times[0][0:2] + ':' + times[0][2:4]
-                                    endtime = times[2][0:2] + ':' + times[2][2:4]
-                                    for day in rowData[0].strip():
-                                        if prevCourse not in dataTimes:
-                                            dataTimes[prevCourse] = []
-                                        time = {
-                                            'day':day,
-                                            'begintime':begintime,
-                                            'endtime':endtime,
-                                            'room':''
-                                        }
-                                        dataTimes[prevCourse].append(time)
-                                elif(len(rowData) == 3):
-                                    times = rowData[1].strip().split(' ')
-                                    begintime = times[0][0:2] + ':' + times[0][2:4]
-                                    endtime = times[2][0:2] + ':' + times[2][2:4]
-                                    for day in rowData[0].strip():
-                                        if prevCourse not in dataTimes:
-                                            dataTimes[prevCourse] = []
-                                        time = {
-                                            'day':day,
-                                            'begintime':begintime,
-                                            'endtime':endtime,
-                                            'room':rowData[2].strip()
-                                        }
-                                        dataTimes[prevCourse].append(time)
-                                elif(len(rowData) >= 8):
-                                    coursenumber = int(rowData[0].strip())
-                                    times = rowData[4].strip().split(' ')
-                                    begintime = times[0][0:2] + ':' + times[0][2:4]
-                                    endtime = times[2][0:2] + ':' + times[2][2:4]
-                                    course = { 
-                                        'coursenumber':coursenumber,
-                                        'coursecode':rowData[1].strip(),
-                                        'section':rowData[2].strip(),
-                                        'enrollcap':rowData[6].strip(),
-                                        'enrolled':rowData[7].strip(),
-                                    }
-                                    prevCourse = coursenumber
-                                    courses.append(course)
-                                    for day in rowData[3].strip():
-                                        if coursenumber not in dataTimes:
-                                            dataTimes[coursenumber] = []
-                                        time = {
-                                            'day':day,
-                                            'begintime':begintime,
-                                            'endtime':endtime,
-                                            'room':rowData[5].strip()
-                                        }
-                                        dataTimes[coursenumber].append(time)
-                        else:
-                            print("No course offering.")
-                    else:
-                        print("Server unavailable.")
-                for c in courses:
-                    classnumber = c['coursenumber']
-                    course_code = c['coursecode']
-                    section_code = c['section']
-                    current_enrolled = int(c['enrolled'])
-                    max_enrolled = int(c['enrollcap'])
-                    faculty_name = '' 
-                    if(classnumber in dataFaculty):
-                        faculty_name = dataFaculty[classnumber]
-                    if(classnumber in dataTimes):
-                        for d in dataTimes[classnumber]:
-                            time_begin = d['begintime'] 
-                            time_end= d['endtime']
-                            room_name = d['room'].strip()
-                            faculty = None
-                            if(faculty_name != ''):
-                                faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
-                            course = Course.objects.get_or_create(course_code=course_code)[0]
-                            section = Section.objects.get_or_create(section_code=section_code)[0]
-                            day = Day.objects.get(day_code=d['day'])
-                            timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
-                            room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
-                            status = True
-                            CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
-                            offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
-                            for o in offerings:
-                                o.current_enrolled = current_enrolled
-                                o.max_enrolled = max_enrolled
-                                o.save()
-                            print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
-                    else:
-                        time_begin = '00:00'
-                        time_end = '00:00'
-                        room_name = ''
-                        faculty = None
-                        if(faculty_name != ''):
-                            faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
-                        course = Course.objects.get_or_create(course_code=course_code)[0]
-                        section = Section.objects.get_or_create(section_code=section_code)[0]
-                        timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
-                        room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
-                        status = True
-                        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
-                        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
-                        for o in offerings:
-                            o.current_enrolled = current_enrolled
-                            o.max_enrolled = max_enrolled
-                            o.save()
-                        print(course_code, section_code, faculty_name, room_name, classnumber)
+        #             if(r.status_code == 200):
+        #                 parsed = BeautifulSoup(r.text, "html5lib").center
+        #                 rows = parsed.find_all("tr")
+        #                 prevCourse = None
+        #                 if(len(rows) > 1):
+        #                     for row in rows[1:]:
+        #                         rowData = row.get_text().strip().split("\n")
+        #                         if(len(rowData) == 1):
+        #                             faculty = rowData[0].strip()
+        #                             dataFaculty[prevCourse] = faculty
+        #                         elif(len(rowData) == 2):
+        #                             times = rowData[1].strip().split(' ')
+        #                             begintime = times[0][0:2] + ':' + times[0][2:4]
+        #                             endtime = times[2][0:2] + ':' + times[2][2:4]
+        #                             for day in rowData[0].strip():
+        #                                 if prevCourse not in dataTimes:
+        #                                     dataTimes[prevCourse] = []
+        #                                 time = {
+        #                                     'day':day,
+        #                                     'begintime':begintime,
+        #                                     'endtime':endtime,
+        #                                     'room':''
+        #                                 }
+        #                                 dataTimes[prevCourse].append(time)
+        #                         elif(len(rowData) == 3):
+        #                             times = rowData[1].strip().split(' ')
+        #                             begintime = times[0][0:2] + ':' + times[0][2:4]
+        #                             endtime = times[2][0:2] + ':' + times[2][2:4]
+        #                             for day in rowData[0].strip():
+        #                                 if prevCourse not in dataTimes:
+        #                                     dataTimes[prevCourse] = []
+        #                                 time = {
+        #                                     'day':day,
+        #                                     'begintime':begintime,
+        #                                     'endtime':endtime,
+        #                                     'room':rowData[2].strip()
+        #                                 }
+        #                                 dataTimes[prevCourse].append(time)
+        #                         elif(len(rowData) >= 8):
+        #                             coursenumber = int(rowData[0].strip())
+        #                             times = rowData[4].strip().split(' ')
+        #                             begintime = times[0][0:2] + ':' + times[0][2:4]
+        #                             endtime = times[2][0:2] + ':' + times[2][2:4]
+        #                             course = { 
+        #                                 'coursenumber':coursenumber,
+        #                                 'coursecode':rowData[1].strip(),
+        #                                 'section':rowData[2].strip(),
+        #                                 'enrollcap':rowData[6].strip(),
+        #                                 'enrolled':rowData[7].strip(),
+        #                             }
+        #                             prevCourse = coursenumber
+        #                             courses.append(course)
+        #                             for day in rowData[3].strip():
+        #                                 if coursenumber not in dataTimes:
+        #                                     dataTimes[coursenumber] = []
+        #                                 time = {
+        #                                     'day':day,
+        #                                     'begintime':begintime,
+        #                                     'endtime':endtime,
+        #                                     'room':rowData[5].strip()
+        #                                 }
+        #                                 dataTimes[coursenumber].append(time)
+        #                 else:
+        #                     print("No course offering.")
+        #             else:
+        #                 print("Server unavailable.")
+        #         for c in courses:
+        #             classnumber = c['coursenumber']
+        #             course_code = c['coursecode']
+        #             section_code = c['section']
+        #             current_enrolled = int(c['enrolled'])
+        #             max_enrolled = int(c['enrollcap'])
+        #             faculty_name = '' 
+        #             if(classnumber in dataFaculty):
+        #                 faculty_name = dataFaculty[classnumber]
+        #             if(classnumber in dataTimes):
+        #                 for d in dataTimes[classnumber]:
+        #                     time_begin = d['begintime'] 
+        #                     time_end= d['endtime']
+        #                     room_name = d['room'].strip()
+        #                     faculty = None
+        #                     if(faculty_name != ''):
+        #                         faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
+        #                     course = Course.objects.get_or_create(course_code=course_code)[0]
+        #                     section = Section.objects.get_or_create(section_code=section_code)[0]
+        #                     day = Day.objects.get(day_code=d['day'])
+        #                     timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
+        #                     room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
+        #                     status = True
+        #                     CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+        #                     offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+        #                     for o in offerings:
+        #                         o.current_enrolled = current_enrolled
+        #                         o.max_enrolled = max_enrolled
+        #                         o.save()
+        #                     print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
+        #             else:
+        #                 time_begin = '00:00'
+        #                 time_end = '00:00'
+        #                 room_name = ''
+        #                 faculty = None
+        #                 if(faculty_name != ''):
+        #                     faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
+        #                 course = Course.objects.get_or_create(course_code=course_code)[0]
+        #                 section = Section.objects.get_or_create(section_code=section_code)[0]
+        #                 timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
+        #                 room = Room.objects.get_or_create(building=goks[0], room_name=room_name, room_type='', room_capacity=40)[0]
+        #                 status = True
+        #                 CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
+        #                 offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, timeslot=timeslot,room=room, status=status)
+        #                 for o in offerings:
+        #                     o.current_enrolled = current_enrolled
+        #                     o.max_enrolled = max_enrolled
+        #                     o.save()
+        #                 print(course_code, section_code, faculty_name, room_name, classnumber)
 
-        except Exception as e:
-            print(e)
-        with open('courselist.txt','r') as course_list:
-            for c in course_list:
-                try:
-                    retrieveCourse(c.rstrip())
-                except Exception as e:
-                  print(e)
+        # except Exception as e:
+        #     print(e)
+        # with open('courselist.txt','r') as course_list:
+        #     for c in course_list:
+        #         try:
+        #             retrieveCourse(c.rstrip())
+        #         except Exception as e:
+        #           print(e)
     _thread.start_new_thread(start_init,())
     return HttpResponse('Adrienne Soliven is cute <3')
 

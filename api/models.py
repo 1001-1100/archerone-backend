@@ -39,6 +39,7 @@ class Course(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     # flowchart information
     # flowchart_terms = models.ManyToManyField(FlowchartTerm)
+    academic = models.BooleanField(default=True)
     prerequisite_to = models.ManyToManyField('self', related_name='prerequisite', symmetrical=False, blank=True)
     soft_prerequisite_to = models.ManyToManyField('self', related_name='softprereq', symmetrical=False, blank=True)
     co_requisite = models.ManyToManyField('self', related_name='coreq', symmetrical=True, blank=True)
