@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets          
 from .serializers import CustomRegisterSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
-from .models import User, Schedule, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
+from .models import User, Schedule, Cart, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 from .satsolver import solve, solveEdit, search, checkConflicts
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -325,6 +325,16 @@ class CheckConflicts(APIView):
       return Response(True)
     else:
       return Response(False)
+
+class AddCart(APIView):
+  def post(self, request, format=None):
+    Cart.get_or_create(idnum=request['idnum'], classnumber=request['classnumber'])
+    return Response(None)
+
+class RemoveCart(APIView):
+  def post(self, request, format=None):
+    Cart.objects.get(idnum=request['idnum'], classnumber=request['classnumber']).delete()
+    return Response(None)
 
 class SchedulesList(APIView):
   def post(self, request, format=None):

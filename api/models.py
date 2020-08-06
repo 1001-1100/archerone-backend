@@ -79,6 +79,15 @@ class Faculty(models.Model):
         verbose_name = _('faculty member')
         verbose_name_plural = _('faculty members')
 
+class Cart(models.Model):
+    idnum = models.CharField(max_length=100)
+    classnumber = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
+
 class Section(models.Model):
     section_code = models.CharField(max_length=6, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)

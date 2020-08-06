@@ -31,6 +31,8 @@ urlpatterns = [
     path('api/init/', views.init),   
     path('api/enlist/', views.randEnlist),   
     path('api/empty/', views.emptyEnlist),   
+    path('api/addcart/', views.AddCart.as_view()),
+    path('api/removecart/', views.RemoveCart.as_view()),
     path('api/addcourse/<slug:term>/', views.RetrieveCourse.as_view()),   
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/editschedule/', views.EditSchedule.as_view()),
