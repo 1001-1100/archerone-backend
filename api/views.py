@@ -336,6 +336,37 @@ class RemoveCart(APIView):
     Cart.objects.get(idnum=request['idnum'], classnumber=request['classnumber']).delete()
     return Response(None)
 
+class AddCourseOffering(APIView):
+  def post(self, request, format=None):
+    classnumber = request['classnumber']
+    course_code = request['course_code']
+    section_code = request['section_code']
+    current_enrolled = int(request['enrolled'])
+    max_enrolled = int(request['enrollcap'])
+    faculty_name = request['faculty_name'] 
+    days = request['days']
+    for d in days:
+        time_begin = request['time_begin'] 
+        time_end = request['time_end']
+        room_name = request['room_name']
+        faculty = None
+        if(faculty_name != ''):
+            faculty = Faculty.objects.get_or_create(full_name=faculty_name)[0]
+        course = Course.objects.get_or_create(course_code=course_code)[0]
+        section = Section.objects.get_or_create(section_code=section_code)[0]
+        day = Day.objects.get(day_code=d)
+        timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
+        room = Room.objects.get_or_create(room_name=room_name, room_type='', room_capacity=40)[0]
+        status = True
+        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
+        for o in offerings:
+            o.current_enrolled = current_enrolled
+            o.max_enrolled = max_enrolled
+            o.save()
+        print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
+    return Response(course_code)
+
 class SchedulesList(APIView):
   def post(self, request, format=None):
     highCourses = []
