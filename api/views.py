@@ -328,16 +328,17 @@ class CheckConflicts(APIView):
 
 class AddCart(APIView):
   def post(self, request, format=None):
-    Cart.get_or_create(idnum=request['idnum'], classnumber=request['classnumber'])
+    Cart.get_or_create(idnum=request.data['idnum'], classnumber=request.data['classnumber'])
     return Response(None)
 
 class RemoveCart(APIView):
   def post(self, request, format=None):
-    Cart.objects.get(idnum=request['idnum'], classnumber=request['classnumber']).delete()
+    Cart.objects.get(idnum=request.data['idnum'], classnumber=request.data['classnumber']).delete()
     return Response(None)
 
 class AddCourseOffering(APIView):
   def post(self, request, format=None):
+    request = request.data
     classnumber = request['classnumber']
     course_code = request['course_code']
     section_code = request['section_code']
