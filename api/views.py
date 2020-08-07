@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets          
-from .serializers import CustomRegisterSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
+from .serializers import CustomRegisterSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
 from .models import User, Schedule, Cart, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 from .satsolver import solve, solveEdit, search, checkConflicts
 from rest_framework.response import Response
@@ -75,6 +75,10 @@ class CourseOfferingViewSet(viewsets.ModelViewSet):
 class ScheduleViewSet(viewsets.ModelViewSet):       
   serializer_class = ScheduleSerializer 
   queryset = Schedule.objects.all()              
+
+class CartViewSet(viewsets.ModelViewSet):       
+  serializer_class = CartSerializer
+  queryset = Cart.objects.all()     
 
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):

@@ -25,6 +25,7 @@ router.register(r'friendrequests', views.FriendRequestViewSet)
 router.register(r'notifications', views.NotificationViewSet)     
 router.register(r'colleges', views.CollegeViewSet)    
 router.register(r'flowchartterms', views.FlowchartTermViewSet)
+router.register(r'carts', views.CartViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),                
