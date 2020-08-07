@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets          
-from .serializers import CustomRegisterSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
-from .models import User, Schedule, Cart, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
+from .serializers import CustomRegisterSerializer, EnlistSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
+from .models import User, Enlist, Schedule, Cart, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 from .satsolver import solve, solveEdit, search, checkConflicts
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,9 +76,9 @@ class ScheduleViewSet(viewsets.ModelViewSet):
   serializer_class = ScheduleSerializer 
   queryset = Schedule.objects.all()              
 
-class CartViewSet(viewsets.ModelViewSet):       
-  serializer_class = CartSerializer
-  queryset = Cart.objects.all()     
+class EnlistViewSet(viewsets.ModelViewSet):       
+  serializer_class = EnlistSerializer 
+  queryset = Enlist.objects.all()     
 
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
@@ -326,6 +326,14 @@ class CheckConflicts(APIView):
   def post(self, request, format=None):
     result = checkConflicts(request.data['classnumbers'])
     if(str(result) == 'sat'):
+      return Response(True)
+    else:
+      return Response(False)
+
+class CheckEnlist(APIView):
+  def post(self, request, format=None):
+    result = Enlist.objects.get(idnum=request.data['idnum'])
+    if(len(result) > 0):
       return Response(True)
     else:
       return Response(False)

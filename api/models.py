@@ -88,6 +88,15 @@ class Cart(models.Model):
         verbose_name = _('cart')
         verbose_name_plural = _('carts')
 
+class Enlist(models.Model):
+    idnum = models.CharField(max_length=100)
+    allowed = models.BooleanField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('enlist')
+        verbose_name_plural = _('enlists')
+
 class Section(models.Model):
     section_code = models.CharField(max_length=6, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
