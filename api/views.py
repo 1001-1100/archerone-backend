@@ -332,7 +332,7 @@ class CheckConflicts(APIView):
 
 class AddCart(APIView):
   def post(self, request, format=None):
-    Cart.get_or_create(idnum=request.data['idnum'], classnumber=request.data['classnumber'])
+    Cart.objects.get_or_create(idnum=request.data['idnum'], classnumber=request.data['classnumber'])
     return Response(None)
 
 class RemoveCart(APIView):
