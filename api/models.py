@@ -106,7 +106,7 @@ class Building(models.Model):
         verbose_name_plural = _('buildings')
 
 class Room(models.Model):
-    building = models.ForeignKey(Building, on_delete=models.CASCADE)
+    building = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
     room_name = models.CharField(max_length=50, unique=True)
     room_type = models.CharField(max_length=50, blank=True)
     room_capacity = models.IntegerField()

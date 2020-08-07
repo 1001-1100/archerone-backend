@@ -357,7 +357,8 @@ class AddCourseOffering(APIView):
         section = Section.objects.get_or_create(section_code=section_code)[0]
         day = Day.objects.get(day_code=d)
         timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
-        room = Room.objects.get_or_create(room_name=room_name, room_type='', room_capacity=40)[0]
+        if(room_name != ''):
+            room = Room.objects.get_or_create(room_name=room_name, room_type='', room_capacity=40)[0]
         status = True
         CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
         offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,room=room, status=status)
@@ -365,7 +366,6 @@ class AddCourseOffering(APIView):
             o.current_enrolled = current_enrolled
             o.max_enrolled = max_enrolled
             o.save()
-        print(course_code, section_code, faculty_name, d['day'], d['begintime'], d['endtime'], room_name, classnumber)
     return Response(course_code)
 
 class SchedulesList(APIView):
