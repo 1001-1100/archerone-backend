@@ -81,7 +81,7 @@ class EnlistViewSet(viewsets.ModelViewSet):
   queryset = Enlist.objects.all()     
 
 class CartViewSet(viewsets.ModelViewSet):       
-  serializer_class = CartViewSet 
+  serializer_class = CartSerializer
   queryset = Cart.objects.all()     
 
 class SavedScheduleList(APIView):
