@@ -26,6 +26,7 @@ router.register(r'notifications', views.NotificationViewSet)
 router.register(r'colleges', views.CollegeViewSet)    
 router.register(r'flowchartterms', views.FlowchartTermViewSet)
 router.register(r'carts', views.CartViewSet)
+router.register(r'enlists', views.EnlistViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),                
