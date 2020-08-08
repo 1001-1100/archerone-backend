@@ -336,7 +336,7 @@ class CheckConflicts(APIView):
 
 class CheckEnlist(APIView):
   def get(self, request, pk, format=None):
-    result = Enlist.objects.get(idnum=pk)
+    result = Enlist.objects.filter(idnum=pk)
     if(len(result) > 0):
       return Response(True)
     else:
