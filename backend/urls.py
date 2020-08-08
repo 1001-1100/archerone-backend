@@ -40,7 +40,7 @@ urlpatterns = [
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/editschedule/', views.EditSchedule.as_view()),
     path('api/checkconflicts/', views.CheckConflicts.as_view()),
-    path('api/checkenlist/', views.CheckEnlist.as_view()),
+    path('api/checkenlist/<int:pk>/', views.CheckEnlist.as_view()),
     path('api/preferencelist/<int:pk>/', views.PreferenceList.as_view()),     
     path('api/friendlist/<int:pk>/', views.FriendList.as_view()),     
     path('api/searchcourse/<slug:term>/', views.SearchCourse.as_view()),     
