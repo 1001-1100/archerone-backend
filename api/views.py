@@ -80,6 +80,10 @@ class EnlistViewSet(viewsets.ModelViewSet):
   serializer_class = EnlistSerializer 
   queryset = Enlist.objects.all()     
 
+class CartViewSet(viewsets.ModelViewSet):       
+  serializer_class = CartViewSet 
+  queryset = Cart.objects.all()     
+
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
         schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')
