@@ -3,7 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
-from .models import College, Enlist, Cart, FriendRequest, Notification, Degree, Course, Faculty, FlowchartTerm, Section, Building, Room, Day, Timeslot, CourseOffering, CoursePriority, Schedule, User, Preference
+from .models import College, Survey, Enlist, Cart, FriendRequest, Notification, Degree, Course, Faculty, FlowchartTerm, Section, Building, Room, Day, Timeslot, CourseOffering, CoursePriority, Schedule, User, Preference
 
 from django.conf import settings
 from django.contrib.auth.forms import PasswordResetForm
@@ -107,6 +107,11 @@ class EnlistSerializer(serializers.ModelSerializer):
   class Meta:
     model = Enlist
     fields = ('id', 'idnum','allowed')
+
+class SurveySerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Survey 
+    fields = ('id', 'data')
 
 class CustomRegisterSerializer(RegisterSerializer):
     # username = serializers.CharField(required=True)

@@ -97,6 +97,13 @@ class Enlist(models.Model):
         verbose_name = _('enlist')
         verbose_name_plural = _('enlists')
 
+class Survey(models.Model):
+    data = models.CharField(max_length=200) 
+
+    class Meta:
+        verbose_name = _('survey')
+        verbose_name_plural = _('surveys')
+
 class Section(models.Model):
     section_code = models.CharField(max_length=6, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
