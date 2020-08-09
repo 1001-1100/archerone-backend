@@ -110,7 +110,7 @@ class EnlistSerializer(serializers.ModelSerializer):
 
 class SurveySerializer(serializers.ModelSerializer):
   class Meta:
-    model = Survey 
+    model = Survey
     fields = ('id', 'data')
 
 class CustomRegisterSerializer(RegisterSerializer):
