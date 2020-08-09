@@ -352,6 +352,20 @@ class RemoveCart(APIView):
     Cart.objects.get(idnum=request.data['idnum'], classnumber=request.data['classnumber']).delete()
     return Response(None)
 
+class ModifyOffering(APIView):
+  def post(self, request, format=None):
+    offerings = CourseOffering.objects.filter(classnumber=request.data['classnumber'])
+    if(request.data['action'] == 'full'):
+      for c in offerings:
+        c.current_enrolled = c.max_enrolled
+        c.save()
+    elif(request.data['action'] == 'empty'):
+      for c in offerings:
+        c.current_enrolled = 0
+        c.save()
+
+    return Response(None)
+
 class AddCourseOffering(APIView):
   def post(self, request, format=None):
     request = request.data
@@ -737,7 +751,7 @@ def randEnlist(request):
     def start_init():
       all_courseofferings = CourseOffering.objects.all()
       for o in all_courseofferings:
-        o.current_enrolled = randint(0, o.max_enrolled + 1) 
+        o.current_enrolled = randint(0, o.max_enrolled) 
         o.save()
     _thread.start_new_thread(start_init,())
     return HttpResponse('Adrienne Soliven is cute <3')
