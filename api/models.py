@@ -98,7 +98,7 @@ class Enlist(models.Model):
         verbose_name_plural = _('enlists')
 
 class Survey(models.Model):
-    data = models.CharField(max_length=200) 
+    data = models.CharField(max_length=10000) 
 
     class Meta:
         verbose_name = _('survey')
