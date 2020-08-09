@@ -101,12 +101,12 @@ class UserSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
   class Meta:
     model = Cart 
-    fields = ('classnumber','idnum')
+    fields = ('id', 'classnumber','idnum')
 
 class EnlistSerializer(serializers.ModelSerializer):
   class Meta:
     model = Enlist
-    fields = ('idnum','allowed')
+    fields = ('id', 'idnum','allowed')
 
 class CustomRegisterSerializer(RegisterSerializer):
     # username = serializers.CharField(required=True)
