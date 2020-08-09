@@ -81,6 +81,7 @@ class Faculty(models.Model):
 
 class Cart(models.Model):
     idnum = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     classnumber = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

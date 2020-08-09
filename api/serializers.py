@@ -101,7 +101,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
   class Meta:
     model = Cart 
-    fields = ('id', 'classnumber','idnum')
+    fields = ('id', 'classnumber','idnum','name')
 
 class EnlistSerializer(serializers.ModelSerializer):
   class Meta:
