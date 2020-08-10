@@ -124,8 +124,8 @@ class Building(models.Model):
 
 class Room(models.Model):
     building = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
-    room_name = models.TextField(unique=True, blank=True)
-    room_type = models.TextField(blank=True)
+    room_name = models.CharField(max_length=255, unique=True, blank=True)
+    room_type = models.CharField(max_length=255, blank=True)
     room_capacity = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
