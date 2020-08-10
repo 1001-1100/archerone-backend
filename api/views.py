@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import viewsets          
-from .serializers import CustomRegisterSerializer, SurveySerializer, EnlistSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
+from .serializers import CustomRegisterSerializer, RoomSerializer, SurveySerializer, EnlistSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
 from .models import User, Survey, Enlist, Schedule, Cart, FriendRequest, Notification, Course, Degree, College, CoursePriority, Preference, Day, Faculty, Building, Section, CourseOffering, Timeslot, Room, FlowchartTerm
 from .satsolver import solve, solveEdit, search, checkConflicts
 from rest_framework.response import Response
@@ -87,6 +87,10 @@ class CartViewSet(viewsets.ModelViewSet):
 class SurveyViewSet(viewsets.ModelViewSet):       
   serializer_class = SurveySerializer 
   queryset = Survey.objects.all()  
+
+class RoomViewSet(viewsets.ModelViewSet):       
+  serializer_class = RoomSerializer 
+  queryset = Room.objects.all()  
 
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
@@ -391,11 +395,11 @@ class AddCourseOffering(APIView):
         section = Section.objects.get_or_create(section_code=section_code)[0]
         day = Day.objects.get(day_code=d)
         timeslot = Timeslot.objects.get_or_create(begin_time=time_begin, end_time=time_end)[0]
-        # if(room_name != ''):
-            # room = Room.objects.get_or_create(room_name=room_name, room_type='', room_capacity=40)[0]
+        if(room_name != ''):
+            room = Room.objects.get_or_create(room_name=room_name, room_type='', room_capacity=40)[0]
         status = True
-        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,status=status)
-        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, day=day, timeslot=timeslot,status=status)
+        CourseOffering.objects.get_or_create(classnumber=classnumber, faculty=faculty, course=course, section=section, room=room, day=day, timeslot=timeslot,status=status)
+        offerings = CourseOffering.objects.filter(classnumber=classnumber, faculty=faculty, course=course, section=section, room=room, day=day, timeslot=timeslot,status=status)
         for o in offerings:
             o.current_enrolled = current_enrolled
             o.max_enrolled = max_enrolled
