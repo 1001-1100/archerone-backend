@@ -480,7 +480,7 @@ class SchedulesListFriends(APIView):
         'filterFull': request.data['filterFull'],
         'courseOfferings': [],
       }
-      friends.append(friend)
+      friends.append(friendUser)
 
     serializedSchedules = []
     schedules = solveFriends(mainUser, friends)
