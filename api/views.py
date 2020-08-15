@@ -450,9 +450,9 @@ class SchedulesListFriends(APIView):
     highCourses = []
     lowCourses = []
     for c in CoursePriority.objects.filter(user=user,priority=True):
-      highCourses.append(c.courses)
+      highCourses.append(c.courses.id)
     for c in CoursePriority.objects.filter(user=user,priority=False):
-      lowCourses.append(c.courses)
+      lowCourses.append(c.courses.id)
 
     mainUser = {
       'highCourses': highCourses,
@@ -469,9 +469,9 @@ class SchedulesListFriends(APIView):
       highCourses = []
       lowCourses = []
       for c in CoursePriority.objects.filter(user=friend,priority=True):
-        highCourses.append(c.courses)
+        highCourses.append(c.courses.id)
       for c in CoursePriority.objects.filter(user=friend,priority=False):
-        lowCourses.append(c.courses)
+        lowCourses.append(c.courses.id)
       friendUser = {
         'highCourses': highCourses,
         'lowCourses': lowCourses, 
