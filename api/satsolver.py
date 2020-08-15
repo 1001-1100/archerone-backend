@@ -274,6 +274,58 @@ def solve(highCourses, lowCourses, preferences, filterFull, courseOfferings):
 
     return schedules 
 
+def solveFriends(mainUser, friends):
+    z3 = Optimize()
+
+    for i in range(0, len(friends)):
+        addHardConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['filterFull'], mainUser['courseOfferings'])
+        addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
+        otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
+
+    for f in friends:
+        addHardConstraints(z3, f['highCourses'], f['lowCourses'], f['filterFull'], f['courseOfferings'])
+        addSoftConstraints(z3, f['highCourses'], f['lowCourses'])
+        otherPreferences = addPreferences(z3, f['highCourses'], f['lowCourses'], f['preferences'])
+
+    schedules = []
+
+    for i in range(0, 10):
+        z3.check()
+        model = z3.model()
+        schedule = {}
+        information = []
+        selectedCourses = []
+        offerings = CourseOffering.objects.none() 
+        for o in model:
+            if(model[o]):
+                offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
+        if(len(offerings) == 0):
+            break
+        for o in offerings:
+            selectedCourses.append(o.course.course_code)
+        selectedCourses = set(selectedCourses)
+        allCourses = []
+        for c in mainUser['highCourses']:
+            allCourses.append(Course.objects.get(id=c).course_code)
+        for c in mainUser['lowCourses']:
+            allCourses.append(Course.objects.get(id=c).course_code)
+            
+        for c in allCourses:
+            if not (c in selectedCourses):
+                information.append(c)
+            
+        schedule['offerings'] = offerings
+        schedule['information'] = set(information)
+        schedule['preferences'] = checkPreferences(z3, model, mainUser['preferences'])
+        print(schedule['information'])
+        print(schedule['preferences'])
+        schedules.append(schedule)
+
+        addExtraConstraints(z3, model)
+        addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
+
+    return schedules 
+
 def solveEdit(classnumbers, courses):
     def addHardConstraints():
         allOfferings = CourseOffering.objects.none()

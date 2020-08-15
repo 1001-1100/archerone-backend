@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/addcourseoffering/', views.AddCourseOffering.as_view()),
     path('api/addcourse/<slug:term>/', views.RetrieveCourse.as_view()),   
     path('api/generateschedule/', views.SchedulesList.as_view()),
+    path('api/generateschedulefriends/', views.SchedulesListFriends.as_view()),
     path('api/editschedule/', views.EditSchedule.as_view()),
     path('api/checkconflicts/', views.CheckConflicts.as_view()),
     path('api/checkenlist/<int:pk>/', views.CheckEnlist.as_view()),
