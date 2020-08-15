@@ -447,10 +447,16 @@ class SchedulesListFriends(APIView):
     preferences = Preference.objects.filter(user=user)
     filterFull = request.data['filterFull']
     # courseOfferings = request.data['courseOfferings']
+    highCourses = []
+    lowCourses = []
+    for c in CoursePriority.objects.filter(user=user,priority=True):
+      highCourses.append(c.courses)
+    for c in CoursePriority.objects.filter(user=user,priority=False):
+      lowCourses.append(c.courses)
 
     mainUser = {
-      'highCourses': CoursePriority.objects.filter(user=user,priority=True),
-      'lowCourses': CoursePriority.objects.filter(user=user,priority=False),
+      'highCourses': highCourses,
+      'lowCourses': lowCourses,
       'user': user,
       'preferences': preferences,
       'filterFull': filterFull,
@@ -460,9 +466,15 @@ class SchedulesListFriends(APIView):
     friends = []
 
     for friend in request.data['friends']:
+      highCourses = []
+      lowCourses = []
+      for c in CoursePriority.objects.filter(user=friend,priority=True):
+        highCourses.append(c.courses)
+      for c in CoursePriority.objects.filter(user=friend,priority=False):
+        lowCourses.append(c.courses)
       friendUser = {
-        'highCourses': CoursePriority.objects.filter(user=friend,priority=True),
-        'lowCourses': CoursePriority.objects.filter(user=friend,priority=False),
+        'highCourses': highCourses,
+        'lowCourses': lowCourses, 
         'user': friend,
         'preferences': Preference.objects.filter(user=friend),
         'filterFull': request.data['filterFull'],
