@@ -303,7 +303,7 @@ def solveFriends(mainUser, friends):
             break
         newOfferings = []
         for o in offerings:
-            if(o.course.course_code not in mainUser['highCourses'] + mainUser['lowCourses']):
+            if(o.course.id not in mainUser['highCourses'] and o.course.id not in mainUser['lowCourses']):
                 newOfferings.append(o)
                 selectedCourses.append(o.course.course_code)
         offerings = newOfferings
