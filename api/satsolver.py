@@ -151,8 +151,6 @@ def checkPreferences(z3, model, preferences):
         'T': [],
         'W': [],
         'H': [],
-        'F': [],
-        'S': [],
     }
     for o in model:
         if(model[o]):
