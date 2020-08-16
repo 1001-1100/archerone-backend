@@ -152,10 +152,11 @@ def checkPreferences(z3, model, preferences):
     }
     for o in model:
         if(model[o]):
-            for d in perDay:
-                if(o.day.day_code == d):
-                    perDay[d].push(o)
             offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            for d in perDay:
+                for o in offerings:
+                    if(o.day.day_code == d):
+                        perDay[d].push(o)
             for p in preferences:
                 if(p.earliest_class_time != None):
                     earliest = p.earliest_class_time
