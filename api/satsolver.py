@@ -199,6 +199,7 @@ def checkPreferences(z3, model, preferences):
     for o in model:
         if(model[o]):
             offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            notSections = []
             for o in offerings:
                 if(o.day.id not in days):
                     unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
@@ -207,7 +208,9 @@ def checkPreferences(z3, model, preferences):
                     if(s in o.section.section_code):
                         sectionSatisfied = True
                 if(not sectionSatisfied):
-                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+                    if(o.course.course_code not in notSections):
+                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+                        notSections.append(o.course.course_code)
 
 
     if(min_courses != None):
