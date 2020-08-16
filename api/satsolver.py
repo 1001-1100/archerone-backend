@@ -211,11 +211,11 @@ def checkPreferences(z3, model, preferences):
     if(min_courses != None):
         for d in perDay:
             if(int(min_courses) > len(perDay[d])):
-                unsatisfied.append(str(d)+' has more than '+str(min_courses+' courses'))
+                unsatisfied.append(str(d)+' has more than '+str(min_courses)+' courses'))
     if(max_courses != None):
         for d in perDay:
             if(int(max_courses) < len(perDay[d])):
-                unsatisfied.append(str(d)+' has more than '+str(max_courses+' courses'))
+                unsatisfied.append(str(d)+' has more than '+str(max_courses)+' courses'))
     return unsatisfied
 
 def checkPreferencesFriends(offerings, preferences):
