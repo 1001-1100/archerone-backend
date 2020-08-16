@@ -156,7 +156,7 @@ def checkPreferences(z3, model, preferences):
             for d in perDay:
                 for o in offerings:
                     if(o.day.day_code == d):
-                        perDay[d].push(o)
+                        perDay[d].append(o)
             for p in preferences:
                 if(p.earliest_class_time != None):
                     earliest = p.earliest_class_time
