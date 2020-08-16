@@ -125,8 +125,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     degree = serializers.PrimaryKeyRelatedField(queryset=Degree.objects.all(),required=True)
     
     def validate_email(self, value):
-        if "@dlsu.edu.ph" not in value:
-            raise serializers.ValidationError("Please enter a valid DLSU email address.")
+        # if "@dlsu.edu.ph" not in value:
+            # raise serializers.ValidationError("Please enter a valid DLSU email address.")
         return value
 
     def get_cleaned_data(self):

@@ -504,6 +504,69 @@ class SchedulesListFriends(APIView):
       serializedSchedules.append(serializedSchedule)
     return Response(serializedSchedules)
 
+class SchedulesListSuggestions(APIView):
+  def post(self, request, format=None):
+    user = request.data['user_id']
+    preferences = Preference.objects.filter(user=user)
+    filterFull = request.data['filterFull']
+    # courseOfferings = request.data['courseOfferings']
+    highCourses = []
+    lowCourses = []
+    for c in CoursePriority.objects.filter(user=user,priority=True):
+      highCourses.append(c.courses.id)
+    for c in CoursePriority.objects.filter(user=user,priority=False):
+      lowCourses.append(c.courses.id)
+
+    mainUser = {
+      'highCourses': highCourses,
+      'lowCourses': lowCourses,
+      'user': user,
+      'preferences': preferences,
+      'filterFull': filterFull,
+      'courseOfferings': [],
+    }
+
+    friends = []
+
+    for friend in request.data['friends']:
+      highCourses = []
+      lowCourses = []
+      for c in CoursePriority.objects.filter(user=friend,priority=True):
+        highCourses.append(c.courses.id)
+      for c in CoursePriority.objects.filter(user=friend,priority=False):
+        lowCourses.append(c.courses.id)
+      friendUser = {
+        'highCourses': highCourses,
+        'lowCourses': lowCourses, 
+        'user': friend,
+        'preferences': Preference.objects.filter(user=friend),
+        'filterFull': request.data['filterFull'],
+        'courseOfferings': [],
+      }
+      friends.append(friendUser)
+
+    serializedSchedules = []
+    schedules = solveFriends(mainUser, friends)
+    for s in schedules:
+      serializedSchedule = {}
+      serializer = CourseOfferingSerializer(s['offerings'], many=True)
+      for d in serializer.data:
+        if(d['faculty'] != None):
+          d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+        d['course_id'] = d['course']
+        d['course'] = Course.objects.get(id=d['course']).course_code
+        d['section'] = Section.objects.get(id=d['section']).section_code  
+        d['day'] = Day.objects.get(id=d['day']).day_code  
+        d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+        d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+        if(d['room'] != None):
+          d['room'] = Room.objects.get(id=d['room']).room_name
+      serializedSchedule['offerings'] = serializer.data
+      serializedSchedule['information'] = s['information']
+      serializedSchedule['preferences'] = s['preferences']
+      serializedSchedules.append(serializedSchedule)
+    return Response(serializedSchedules)
+
 class FlowchartTermsList(APIView):
   def get(self, request, pk, pk2, format=None):
       flowchartTerms = FlowchartTerm.objects.filter(degree=pk, batch=pk2)
