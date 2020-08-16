@@ -98,8 +98,12 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
         if(p.preferred_sections != None):
             section_code = p.preferred_sections.section_code
             for o in allOfferings:
-                if(str(section_code)[0] == str(o.section.section_code)[0]):
-                    z3.add_soft(Bool(str(o.classnumber)))
+                if(len(str(o.section.section_code)) == 1):
+                    if(str(section_code)[0] == str(o.section.section_code)[0]):
+                        z3.add_soft(Bool(str(o.classnumber)))
+                else:
+                    if(str(section_code) == str(o.section.section_code)):
+                        z3.add_soft(Bool(str(o.classnumber)))
         if(p.preferred_faculty != None):
             faculty_id = p.preferred_faculty.id
             for o in allOfferings:
