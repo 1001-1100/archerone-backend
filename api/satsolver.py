@@ -277,8 +277,8 @@ def solve(highCourses, lowCourses, preferences, filterFull, courseOfferings):
 def solveFriends(mainUser, friends):
     z3 = Optimize()
 
+    addHardConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['filterFull'], mainUser['courseOfferings'])
     for i in range(0, len(friends)):
-        addHardConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['filterFull'], mainUser['courseOfferings'])
         addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
         otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
 
@@ -301,8 +301,12 @@ def solveFriends(mainUser, friends):
                 offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
         if(len(offerings) == 0):
             break
+        newOfferings = []
         for o in offerings:
-            selectedCourses.append(o.course.course_code)
+            if(o.course.course_code not in mainUser['highCourses'] + mainUser['lowCourses']):
+                newOfferings.append(o)
+                selectedCourses.append(o.course.course_code)
+        offerings = newOfferings
         selectedCourses = set(selectedCourses)
         allCourses = []
         for c in mainUser['highCourses']:
