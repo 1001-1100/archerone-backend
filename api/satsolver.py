@@ -300,15 +300,17 @@ def checkPreferencesFriends(offerings, preferences):
             notSections = []
             for o in offerings:
                 if(o.day.id not in days):
-                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
+                    if(days != []):
+                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
                 sectionSatisfied = False
                 for s in sections:
                     if(s in o.section.section_code):
                         sectionSatisfied = True
                 if(not sectionSatisfied):
                     if(o.course.course_code not in notSections):
-                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
-                        notSections.append(o.course.course_code)
+                        if(sections != []):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+                            notSections.append(o.course.course_code)
 
 
     if(min_courses != None):
