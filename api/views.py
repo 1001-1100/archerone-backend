@@ -578,7 +578,8 @@ class FlowchartTermsList(APIView):
           courseSerializer = CourseSerializer(course)
           d2 = courseSerializer.data
           print(d2)
-          d2['college'] = College.objects.get(id=d2['college']).college_code
+          if(d2['college'] != None):
+            d2['college'] = College.objects.get(id=d2['college']).college_code
           courses.append(d2)
         d['courses'] = courses
       return Response(serializer.data)
