@@ -197,22 +197,23 @@ def checkPreferences(z3, model, preferences):
                     max_courses = p.max_courses
                 if(p.break_length != None):
                     break_length = p.break_length
-
     for o in model:
         if(model[o]):
             offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
             notSections = []
             for o in offerings:
                 if(o.day.id not in days):
-                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
+                    if(days != []):
+                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
                 sectionSatisfied = False
                 for s in sections:
                     if(s in o.section.section_code):
                         sectionSatisfied = True
                 if(not sectionSatisfied):
                     if(o.course.course_code not in notSections):
-                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
-                        notSections.append(o.course.course_code)
+                        if(sections != []):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+                            notSections.append(o.course.course_code)
 
 
     if(min_courses != None):
@@ -241,9 +242,19 @@ def checkPreferencesFriends(offerings, preferences):
             allOfferings = allOfferings | CourseOffering.objects.filter(classnumber=int(o.name()))
     days = []
     sections = []
+    perDay = {
+        'M': [],
+        'T': [],
+        'W': [],
+        'H': [],
+    }
     for o in model:
         if(model[o]):
             offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            for d in perDay:
+                for o in offerings:
+                    if(o.day.day_code == d):
+                        perDay[d].append(o)
             for p in preferences:
                 if(p.earliest_class_time != None):
                     earliest = p.earliest_class_time
@@ -282,24 +293,32 @@ def checkPreferencesFriends(offerings, preferences):
                     max_courses = p.max_courses
                 if(p.break_length != None):
                     break_length = p.break_length
-    # for o in model:
-    #     if(model[o]):
-            # if(o.day.id not in days):
-            #     unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
-            # sectionSatisfied = False
-            # for s in sections:
-            #     if(s in o.section.section_code):
-            #         sectionSatisfied = True
-            # if(not sectionSatisfied):
-            #     unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+
+    for o in model:
+        if(model[o]):
+            offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
+            notSections = []
+            for o in offerings:
+                if(o.day.id not in days):
+                    unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not on a preferred day')
+                sectionSatisfied = False
+                for s in sections:
+                    if(s in o.section.section_code):
+                        sectionSatisfied = True
+                if(not sectionSatisfied):
+                    if(o.course.course_code not in notSections):
+                        unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
+                        notSections.append(o.course.course_code)
 
 
     if(min_courses != None):
-        if(int(min_courses) > len(allOfferings)/2):
-            unsatisfied.append('Number of courses are less than '+str(min_courses))
+        for d in perDay:
+            if(int(min_courses) > len(perDay[d])):
+                unsatisfied.append(str(d)+' has less than '+str(min_courses)+' courses')
     if(max_courses != None):
-        if(int(max_courses) < len(allOfferings)/2):
-            unsatisfied.append('Number of courses are more than '+str(max_courses))
+        for d in perDay:
+            if(int(max_courses) < len(perDay[d])):
+                unsatisfied.append(str(d)+' has more than '+str(max_courses)+' courses')
     return unsatisfied
 
 def addExtraConstraints(z3, model):
