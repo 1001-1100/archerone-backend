@@ -39,6 +39,8 @@ urlpatterns = [
     path('api/removecart/', views.RemoveCart.as_view()),
     path('api/addcourseoffering/', views.AddCourseOffering.as_view()),
     path('api/addcourse/<slug:term>/', views.RetrieveCourse.as_view()),   
+    path('api/addundesirableclass/', views.AddUndesirableClass.as_view()),   
+    path('api/undesirableclasslist/<int:pk>/<int:pk2>/', views.UndesirableClassList.as_view()),   
     path('api/generateschedule/', views.SchedulesList.as_view()),
     path('api/generateschedulefriends/', views.SchedulesListFriends.as_view()),
     path('api/editschedule/', views.EditSchedule.as_view()),

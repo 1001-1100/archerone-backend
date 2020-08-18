@@ -134,10 +134,27 @@ class PreferenceList(APIView):
       preferences = Preference.objects.filter(user=pk).delete()
       return Response(None)
 
+class UndesirableClassList(APIView):
+  def get(self, request, pk, format=None):
+      preferences = Preference.objects.filter(user=pk).exclude(undesirable_classes=None)
+      serializer = PreferenceSerializer(preferences, many=True)
+      for d in serializer.data:
+        if(d['undesirable_classes'] != None):
+          offering = CourseOffering.objects.get(id=d['undesirable_classes'])
+          d['undesirable_classes'] = offering.classnumber
+      return Response(serializer.data)
+
+  def delete(self, request, pk, pk2, format=None):
+      offering = CourseOffering.objects.get(classnumber=pk2)
+      Preference.objects.filter(user=pk,undesirable_classes=offering).delete()
+      return Response(None)
+
 class CoursePriorityList(APIView):
   def get(self, request, pk, format=None):
       coursePriority = CoursePriority.objects.filter(user=pk)
       serializer = CoursePrioritySerializer(coursePriority, many=True)
+      for d in serializer.data:
+        d['course_code'] = Course.objects.get(id=d['courses']).course_code
       return Response(serializer.data)
 
   def delete(self, request, pk, format=None):
@@ -350,6 +367,13 @@ class CheckEnlist(APIView):
     else:
       return Response(False)
 
+class AddUndesirableClass(APIView):
+  def post(self, request, format=None):
+    for c in request.data['classnumber']:
+      offering = CourseOffering.objects.get(classnumber=c)
+      Preference.objects.get_or_create(user=request.data['user_id'], undesirable_classes=offering)
+    return Response(None)
+
 class AddCart(APIView):
   def post(self, request, format=None):
     Cart.objects.get_or_create(idnum=request.data['idnum'], name=request.data['name'], classnumber=request.data['classnumber'])
@@ -460,7 +484,6 @@ class SchedulesListFriends(APIView):
       'user': user,
       'preferences': preferences,
       'filterFull': filterFull,
-      'courseOfferings': [],
     }
 
     friends = []
@@ -478,7 +501,6 @@ class SchedulesListFriends(APIView):
         'user': friend,
         'preferences': Preference.objects.filter(user=friend),
         'filterFull': request.data['filterFull'],
-        'courseOfferings': [],
       }
       friends.append(friendUser)
 

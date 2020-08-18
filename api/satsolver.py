@@ -3,11 +3,8 @@ from z3 import *
 from .models import CourseOffering, Course, Timeslot
 
 
-def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings):
+def addHardConstraints(z3, highCourses, lowCourses, filterFull):
     allOfferings = CourseOffering.objects.none()
-    for o in courseOfferings:
-        a = Not(Bool(str(o['classNmbr'])))
-        z3.add(a)
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
         allOfferings = allOfferings | offerings
@@ -55,18 +52,21 @@ def addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings)
                             z3.add(Implies(a,b))
 
 def addSoftConstraints(z3, highCourses, lowCourses):
-    currentPriority = 100
+    currentPriority = 5
     for c in highCourses:
         offerings = CourseOffering.objects.filter(course=c)
         for o in offerings:
             z3.add_soft(Bool(str(o.classnumber)), currentPriority) 
-        currentPriority -= 10
-    currentPriority = 10
+        currentPriority -= 0.1
+    currentPriority = 1
     for c in lowCourses:
         offerings = CourseOffering.objects.filter(course=c)
         for o in offerings:
             z3.add_soft(Bool(str(o.classnumber)), currentPriority)
-        currentPriority -= 1
+        currentPriority -= 0.01
+    # for o in courseOfferings:
+    #     a = Not(Bool(str(o['classNmbr'])))
+    #     z3.add_soft(a, 10)
 
 def addPreferences(z3, highCourses, lowCourses, preferences):
     allOfferings = CourseOffering.objects.none()
@@ -114,22 +114,25 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
             otherPreferences['min_courses'] = p.min_courses
         if(p.max_courses != None):
             otherPreferences['max_courses'] = p.max_courses
-        if(p.break_length != None):
-            break_length = p.break_length
-            for o in allOfferings:
-                for o2 in allOfferings:
-                    if(o.section != o2.section or o.course != o2.course):
-                        if(o.day == o2.day):
-                            if(o.timeslot != o2.timeslot):
-                                firstTime = o.timeslot
-                                secondTime = o2.timeslot
-                                if(firstTime.end_time < secondTime.begin_time):
-                                    firstEnd = datetime.datetime.combine(datetime.date.today(), firstTime.end_time)
-                                    secondBegin = datetime.datetime.combine(datetime.date.today(), secondTime.begin_time)
-                                    difference = (secondBegin - firstEnd).total_seconds() / 60
-                                    if(abs(difference - break_length) <= 60):
-                                        a = Bool(str(o.classnumber))
-                                        b = Bool(str(o2.classnumber))
+        if(p.undesirable_classes != None):
+            classnumber = p.undesirable_classes.classnumber
+            z3.add_soft(Not(Bool(str(classnumber))))
+        # if(p.break_length != None):
+        #     break_length = p.break_length
+        #     for o in allOfferings:
+        #         for o2 in allOfferings:
+        #             if(o.section != o2.section or o.course != o2.course):
+        #                 if(o.day == o2.day):
+        #                     if(o.timeslot != o2.timeslot):
+        #                         firstTime = o.timeslot
+        #                         secondTime = o2.timeslot
+        #                         if(firstTime.end_time < secondTime.begin_time):
+        #                             firstEnd = datetime.datetime.combine(datetime.date.today(), firstTime.end_time)
+        #                             secondBegin = datetime.datetime.combine(datetime.date.today(), secondTime.begin_time)
+        #                             difference = (secondBegin - firstEnd).total_seconds() / 60
+        #                             if(abs(difference - break_length) <= 60):
+        #                                 a = Bool(str(o.classnumber))
+        #                                 b = Bool(str(o2.classnumber))
                                         # z3.add(Implies(a,b))
                                         
 
@@ -348,10 +351,10 @@ def search(courses, preferences):
 
     return offerings
 
-def solve(highCourses, lowCourses, preferences, filterFull, courseOfferings):
+def solve(highCourses, lowCourses, preferences, filterFull):
     z3 = Optimize()
 
-    addHardConstraints(z3, highCourses, lowCourses, filterFull, courseOfferings)
+    addHardConstraints(z3, highCourses, lowCourses, filterFull)
     addSoftConstraints(z3, highCourses, lowCourses)
     otherPreferences = addPreferences(z3, highCourses, lowCourses, preferences)
 
@@ -397,13 +400,12 @@ def solve(highCourses, lowCourses, preferences, filterFull, courseOfferings):
 def solveFriends(mainUser, friends):
     z3 = Optimize()
 
-    addHardConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['filterFull'], mainUser['courseOfferings'])
-    for i in range(0, len(friends)):
-        addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
-        otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
+    addHardConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['filterFull'])
+    addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
+    otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
 
     for f in friends:
-        addHardConstraints(z3, f['highCourses'], f['lowCourses'], f['filterFull'], f['courseOfferings'])
+        addHardConstraints(z3, f['highCourses'], f['lowCourses'], f['filterFull'])
         addSoftConstraints(z3, f['highCourses'], f['lowCourses'])
         otherPreferences = addPreferences(z3, f['highCourses'], f['lowCourses'], f['preferences'])
 
