@@ -485,7 +485,7 @@ class SchedulesListFriends(APIView):
     mainUser = {
       'highCourses': highCourses,
       'lowCourses': lowCourses,
-      'user': int(user.id),
+      'user': int(user),
       'preferences': preferences,
       'filterFull': filterFull,
     }
