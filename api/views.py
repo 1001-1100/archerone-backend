@@ -93,6 +93,10 @@ class RoomViewSet(viewsets.ModelViewSet):
   serializer_class = RoomSerializer 
   queryset = Room.objects.all()  
 
+class CoordinateScheduleViewSet(viewsets.ModelViewSet):       
+  serializer_class = CoordinateScheduleSerializer 
+  queryset = CoordinateSchedule.objects.all()  
+
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
         schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')
