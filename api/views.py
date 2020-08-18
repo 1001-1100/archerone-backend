@@ -481,9 +481,8 @@ class SchedulesListFriends(APIView):
       lowCourses.append(c.courses.id)
     scheduleClasses = []
     for c in Schedule.objects.filter(user=user):
-      for o in c.courseOfferings:
-        classnumber = CourseOffering.objects.filter(id=o)[0].classnumber
-        scheduleClasses.append(classnumber)
+      for o in c.courseOfferings.all():
+        scheduleClasses.append(o.classnumber)
     
     allUsers = []
 
@@ -503,9 +502,8 @@ class SchedulesListFriends(APIView):
       lowCourses = []
       scheduleClasses = []
       for c in Schedule.objects.filter(user=friend):
-        for o in c.courseOfferings:
-          classnumber = CourseOffering.objects.filter(id=o)[0].classnumber
-          scheduleClasses.append(classnumber)
+        for o in c.courseOfferings.all():
+          scheduleClasses.append(o.classnumber)
       for c in CoursePriority.objects.filter(user=friend,priority=True):
         highCourses.append(c.courses.id)
       for c in CoursePriority.objects.filter(user=friend,priority=False):
@@ -548,8 +546,6 @@ class SchedulesListFriends(APIView):
         serializedSchedules.append(serializedSchedule)
       # CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
       return Response(serializedSchedules)
-    else:
-      return Response(json.loads(foundCoordinate.serializedSchedules))
 
 
 class SchedulesListSuggestions(APIView):
