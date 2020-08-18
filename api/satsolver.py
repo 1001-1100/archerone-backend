@@ -116,7 +116,7 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
             otherPreferences['max_courses'] = p.max_courses
         if(p.undesirable_classes != None):
             classnumber = p.undesirable_classes
-            z3.add_soft(Not(Bool(str(classnumber))))
+            z3.add_soft(Not(Bool(str(classnumber))), 10)
         # if(p.break_length != None):
         #     break_length = p.break_length
         #     for o in allOfferings:
