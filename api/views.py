@@ -553,7 +553,7 @@ class SchedulesListFriends(APIView):
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedule['shareCode'] = shareCode
         serializedSchedules.append(serializedSchedule)
-      CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules='hello').save()
       return Response(serializedSchedules)
 
 
