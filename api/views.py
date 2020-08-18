@@ -368,10 +368,8 @@ class AddUndesirableClass(APIView):
 
 class RemoveUndesirableClass(APIView):
   def post(self, request, format=None):
-    for c in request.data['classnumber']:
-      user = User.objects.get(id=request.data['user_id'])
-      Preference.objects.get(user=user, undesirable_classes=c).delete()
-      print(c)
+    user = User.objects.get(id=request.data['user_id'])
+    Preference.objects.filter(user=user).exclude(undesirable_classes=None).delete()
     return Response(None)
 
 class AddCart(APIView):
