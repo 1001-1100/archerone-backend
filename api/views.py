@@ -554,8 +554,7 @@ class SchedulesListFriends(APIView):
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedule['shareCode'] = shareCode
         serializedSchedules.append(serializedSchedule)
-      serializedString = ''
-      pickle.dumps(serializedString, serializedSchedules)
+      serializedString = pickle.dumps(serializedSchedules)
       CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedString).save()
       return Response(serializedSchedules)
 
