@@ -144,11 +144,6 @@ class UndesirableClassList(APIView):
           d['undesirable_classes'] = offering.classnumber
       return Response(serializer.data)
 
-  def delete(self, request, pk, pk2, format=None):
-      offering = CourseOffering.objects.get(classnumber=pk2)
-      Preference.objects.filter(user=pk,undesirable_classes=offering).delete()
-      return Response(None)
-
 class CoursePriorityList(APIView):
   def get(self, request, pk, format=None):
       coursePriority = CoursePriority.objects.filter(user=pk)
@@ -371,7 +366,16 @@ class AddUndesirableClass(APIView):
   def post(self, request, format=None):
     for c in request.data['classnumber']:
       offering = CourseOffering.objects.get(classnumber=c)
-      Preference.objects.get_or_create(user=request.data['user_id'], undesirable_classes=offering)
+      user = User.objects.get(id=request.data['user_id'])
+      Preference.objects.get_or_create(user=user, undesirable_classes=offering)
+    return Response(None)
+
+class RemoveUndesirableClass(APIView):
+  def post(self, request, format=None):
+    for c in request.data['classnumber']:
+      offering = CourseOffering.objects.get(classnumber=c)
+      user = User.objects.get(id=request.data['user_id'])
+      Preference.objects.get_or_create(user=user, undesirable_classes=offering).delete()
     return Response(None)
 
 class AddCart(APIView):
