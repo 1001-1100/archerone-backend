@@ -486,7 +486,7 @@ class SchedulesListFriends(APIView):
       'highCourses': highCourses,
       'lowCourses': lowCourses,
       'user': int(user),
-      'preferences': preferences,
+      'preferences': list(preferences),
       'filterFull': filterFull,
     }
 
@@ -503,7 +503,7 @@ class SchedulesListFriends(APIView):
         'highCourses': highCourses,
         'lowCourses': lowCourses, 
         'user': int(friend),
-        'preferences': Preference.objects.filter(user=friend),
+        'preferences': list(Preference.objects.filter(user=friend)),
         'filterFull': request.data['filterFull'],
       }
       allUsers.append(friendUser)
@@ -512,7 +512,7 @@ class SchedulesListFriends(APIView):
     allUsers.append(mainUser)
 
     allUsers.sort(key=lambda x: x['user'], reverse=True)
-
+    
     shareCode = hash(json.dumps(allUsers))
 
     foundCoordinate = CoordinateSchedule.objects.filter(shareCode=shareCode)
