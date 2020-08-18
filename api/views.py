@@ -10,6 +10,7 @@ import random
 import requests
 from bs4 import BeautifulSoup
 from random import *
+import string
 import _thread
 import json
 
@@ -467,6 +468,11 @@ class SchedulesList(APIView):
       serializedSchedules.append(serializedSchedule)
     return Response(serializedSchedules)
 
+class GetShareCode(APIView):
+  def get(self, request, pk, format=None):
+    serializedSchedules = json.loads(CoordinateSchedule.objects.get(shareCode=pk).serializedSchedules)
+    return Response(serializedSchedules)
+
 class SchedulesListFriends(APIView):
   def post(self, request, format=None):
     user = request.data['user_id']
@@ -522,7 +528,13 @@ class SchedulesListFriends(APIView):
     allUsers.append(mainUser)
 
     allUsers.sort(key=lambda x: x['user'], reverse=True)
-    
+
+    def random_string_generator(str_size, allowed_chars):
+      return ''.join(random.choice(allowed_chars) for x in range(str_size))
+    chars = string.ascii_letters 
+    size = 6 
+    shareCode = random_string_generator(size,chars) 
+
     if(True):
       serializedSchedules = []
       schedules = solveFriends(mainUser, friends)
@@ -543,8 +555,9 @@ class SchedulesListFriends(APIView):
         serializedSchedule['offerings'] = serializer.data
         serializedSchedule['information'] = s['information']
         serializedSchedule['preferences'] = s['preferences']
+        serializedSchedule['shareCode'] = shareCode
         serializedSchedules.append(serializedSchedule)
-      # CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
       return Response(serializedSchedules)
 
 

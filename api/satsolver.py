@@ -333,6 +333,12 @@ def addExtraConstraints(z3, model):
             current.append((Not(Bool(str(o)))))
     z3.add(Or(tuple(current)))
 
+def addExtraConstraintsFriends(z3, offerings):
+    current = []
+    for o in offerings:
+        current.append(Not(Bool(str(o.classnumber))))
+    z3.add(Or(tuple(current)))
+
 def search(courses, preferences):
     z3 = Optimize()
 
@@ -447,8 +453,11 @@ def solveFriends(mainUser, friends):
         print(schedule['preferences'])
         schedules.append(schedule)
 
-        addExtraConstraints(z3, model)
-        addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
+        addExtraConstraintsFriends(z3, offerings)
+
+        addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
+        for f in friends:
+            addSoftConstraints(z3, f['highCourses'], f['lowCourses'])
 
     return schedules 
 
