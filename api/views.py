@@ -529,7 +529,7 @@ class SchedulesListFriends(APIView):
 
     allUsers.sort(key=lambda x: x['user'], reverse=True)
 
-    shareCode = str(random.randint(10000000, 99999999))
+    shareCode = str(randint(10000000, 99999999))
 
     if(True):
       serializedSchedules = []
