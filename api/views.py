@@ -439,10 +439,9 @@ class SchedulesList(APIView):
     user = request.data['user_id']
     preferences = Preference.objects.filter(user=user)
     filterFull = request.data['filterFull']
-    courseOfferings = request.data['courseOfferings']
 
     serializedSchedules = []
-    schedules = solve(highCourses, lowCourses, preferences, filterFull, courseOfferings)
+    schedules = solve(highCourses, lowCourses, preferences, filterFull)
     for s in schedules:
       serializedSchedule = {}
       serializer = CourseOfferingSerializer(s['offerings'], many=True)
@@ -468,7 +467,6 @@ class SchedulesListFriends(APIView):
     user = request.data['user_id']
     preferences = Preference.objects.filter(user=user)
     filterFull = request.data['filterFull']
-    # courseOfferings = request.data['courseOfferings']
     highCourses = []
     lowCourses = []
     for c in CoursePriority.objects.filter(user=user,priority=True):
