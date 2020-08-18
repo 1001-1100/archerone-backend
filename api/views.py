@@ -365,7 +365,7 @@ class CheckEnlist(APIView):
 class AddUndesirableClass(APIView):
   def post(self, request, format=None):
     for c in request.data['classnumber']:
-      offering = CourseOffering.objects.get(classnumber=c)
+      offering = CourseOffering.objects.filter(classnumber=c)[0]
       user = User.objects.get(id=request.data['user_id'])
       Preference.objects.get_or_create(user=user, undesirable_classes=offering)
     return Response(None)
@@ -373,7 +373,7 @@ class AddUndesirableClass(APIView):
 class RemoveUndesirableClass(APIView):
   def post(self, request, format=None):
     for c in request.data['classnumber']:
-      offering = CourseOffering.objects.get(classnumber=c)
+      offering = CourseOffering.objects.filter(classnumber=c)[0]
       user = User.objects.get(id=request.data['user_id'])
       Preference.objects.get_or_create(user=user, undesirable_classes=offering).delete()
     return Response(None)
