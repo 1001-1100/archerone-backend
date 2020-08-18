@@ -96,9 +96,9 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
         if(p.preferred_buildings != None):
             print(p.preferred_buildings)
         if(p.preferred_sections != None):
-            section_code = p.preferred_sections.section_code
+            section_code = p.preferred_sections
             for o in allOfferings:
-                if(len(str(o.section.section_code)) == 1):
+                if(len(str(section_code)) == 1):
                     if(str(section_code)[0] == str(o.section.section_code)[0]):
                         z3.add_soft(Bool(str(o.classnumber)))
                 else:
@@ -182,7 +182,7 @@ def checkPreferences(z3, model, preferences):
                 if(p.preferred_buildings != None):
                     pass
                 if(p.preferred_sections != None):
-                    section_code = p.preferred_sections.section_code
+                    section_code = p.preferred_section
                     sections.append(section_code)
                     # for o in offerings:
                         # if(section_code not in o.section.section_code):
