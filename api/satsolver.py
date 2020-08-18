@@ -278,7 +278,7 @@ def checkPreferencesFriends(offerings, preferences):
                 if(p.preferred_buildings != None):
                     pass
                 if(p.preferred_sections != None):
-                    section_code = p.preferred_sections.section_code
+                    section_code = p.preferred_sections
                     sections.append(section_code)
                     # for o in offerings:
                         # if(section_code not in o.section.section_code):
