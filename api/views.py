@@ -132,9 +132,6 @@ class PreferenceList(APIView):
         if(d['preferred_faculty'] != None):
           faculty = Faculty.objects.get(id=d['preferred_faculty'])
           d['preferred_faculty'] = {'id':faculty.id, 'full_name':faculty.full_name}
-        if(d['preferred_sections'] != None):
-          section = Section.objects.get(id=d['preferred_sections'])
-          d['preferred_sections'] = {'id':section.id, 'section_code':section.section_code}
       return Response(serializer.data)
 
   def delete(self, request, pk, format=None):
