@@ -471,7 +471,7 @@ class SchedulesList(APIView):
 
 class GetShareCode(APIView):
   def get(self, request, term, format=None):
-    serializedSchedules = pickle.loads(bytes(CoordinateSchedule.objects.get(shareCode=term).serializedSchedules, 'utf-8'))
+    serializedSchedules = pickle.loads(CoordinateSchedule.objects.get(shareCode=term).serializedSchedules)
     return Response(serializedSchedules)
 
 class SchedulesListFriends(APIView):
@@ -554,8 +554,8 @@ class SchedulesListFriends(APIView):
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedule['shareCode'] = shareCode
         serializedSchedules.append(serializedSchedule)
-      serializedString = str(pickle.dumps(serializedSchedules),'utf-8')
-      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedString).save()
+      serializedBytes = pickle.dumps(serializedSchedules)
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
       return Response(serializedSchedules)
 
 

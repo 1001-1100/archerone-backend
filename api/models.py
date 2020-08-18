@@ -225,7 +225,7 @@ class Schedule(models.Model):
 
 class CoordinateSchedule(models.Model):
     shareCode = models.TextField()
-    serializedSchedules = models.TextField()
+    serializedSchedules = models.BinaryField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
 class CoursePriority(models.Model):
