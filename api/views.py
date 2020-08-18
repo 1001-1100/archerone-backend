@@ -511,7 +511,7 @@ class SchedulesListFriends(APIView):
 
     allUsers.append(mainUser)
 
-    allUsers.sort(key=lambda x: x.user, reverse=True)
+    allUsers.sort(key=lambda x: x['user'], reverse=True)
 
     shareCode = hash(json.dumps(allUsers))
 
