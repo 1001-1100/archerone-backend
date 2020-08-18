@@ -393,7 +393,7 @@ def solve(highCourses, lowCourses, preferences, filterFull):
         schedules.append(schedule)
 
         addExtraConstraints(z3, model)
-        addPreferences(z3, highCourses, lowCourses, preferences)
+        addSoftConstraints(z3, highCourses, lowCourses)
 
     return schedules 
 
