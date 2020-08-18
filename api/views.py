@@ -485,7 +485,7 @@ class SchedulesListFriends(APIView):
     mainUser = {
       'highCourses': highCourses,
       'lowCourses': lowCourses,
-      'user': user,
+      'user': int(user.id),
       'preferences': preferences,
       'filterFull': filterFull,
     }
@@ -502,7 +502,7 @@ class SchedulesListFriends(APIView):
       friendUser = {
         'highCourses': highCourses,
         'lowCourses': lowCourses, 
-        'user': friend,
+        'user': int(friend),
         'preferences': Preference.objects.filter(user=friend),
         'filterFull': request.data['filterFull'],
       }
