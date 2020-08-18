@@ -13,6 +13,7 @@ from random import *
 import string
 import _thread
 import json
+import pickle
 
 class UserViewSet(viewsets.ModelViewSet):
   serializer_class = UserSerializer
@@ -553,7 +554,9 @@ class SchedulesListFriends(APIView):
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedule['shareCode'] = shareCode
         serializedSchedules.append(serializedSchedule)
-      CoordinateSchedule(shareCode=shareCode, serializedSchedules='hello').save()
+      serializedString = ''
+      pickle.dumps(serializedString, serializedSchedules)
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedString).save()
       return Response(serializedSchedules)
 
 
