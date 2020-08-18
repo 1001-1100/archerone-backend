@@ -242,7 +242,7 @@ class Preference(models.Model):
     preferred_faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True) 
     preferred_buildings = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
     preferred_sections = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
-    undesirable_classes = models.ForeignKey(CourseOffering, on_delete=models.CASCADE, null=True)
+    undesirable_classes = models.IntegerField(null=True)
     # course_priority = models.ForeignKey(CoursePriority, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
