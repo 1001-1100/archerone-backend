@@ -479,6 +479,11 @@ class SchedulesListFriends(APIView):
       highCourses.append(c.courses.id)
     for c in CoursePriority.objects.filter(user=user,priority=False):
       lowCourses.append(c.courses.id)
+    scheduleClasses = []
+    for c in Schedule.objects.filter(user=user):
+      for o in c.courseOfferings:
+        classnumber = CourseOffering.objects.filter(id=o)[0].classnumber
+        scheduleClasses.append(classnumber)
     
     allUsers = []
 
@@ -486,7 +491,8 @@ class SchedulesListFriends(APIView):
       'highCourses': highCourses,
       'lowCourses': lowCourses,
       'user': int(user),
-      'preferences': list(preferences),
+      'preferences': preferences,
+      'scheduleClasses': scheduleClasses,
       'filterFull': filterFull,
     }
 
@@ -495,6 +501,11 @@ class SchedulesListFriends(APIView):
     for friend in request.data['friends']:
       highCourses = []
       lowCourses = []
+      scheduleClasses = []
+      for c in Schedule.objects.filter(user=friend):
+        for o in c.courseOfferings:
+          classnumber = CourseOffering.objects.filter(id=o)[0].classnumber
+          scheduleClasses.append(classnumber)
       for c in CoursePriority.objects.filter(user=friend,priority=True):
         highCourses.append(c.courses.id)
       for c in CoursePriority.objects.filter(user=friend,priority=False):
@@ -503,7 +514,8 @@ class SchedulesListFriends(APIView):
         'highCourses': highCourses,
         'lowCourses': lowCourses, 
         'user': int(friend),
-        'preferences': list(Preference.objects.filter(user=friend)),
+        'preferences': Preference.objects.filter(user=friend),
+        'scheduleClasses': scheduleClasses,
         'filterFull': request.data['filterFull'],
       }
       allUsers.append(friendUser)
@@ -513,10 +525,7 @@ class SchedulesListFriends(APIView):
 
     allUsers.sort(key=lambda x: x['user'], reverse=True)
     
-    shareCode = hash(json.dumps(allUsers))
-
-    foundCoordinate = CoordinateSchedule.objects.filter(shareCode=shareCode)
-    if(len(foundCoordinate) <= 0):
+    if(True):
       serializedSchedules = []
       schedules = solveFriends(mainUser, friends)
       for s in schedules:
@@ -537,7 +546,7 @@ class SchedulesListFriends(APIView):
         serializedSchedule['information'] = s['information']
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedules.append(serializedSchedule)
-      CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
+      # CoordinateSchedule(shareCode=shareCode, serializedSchedules=json.dumps(serializedSchedules)).save()
       return Response(serializedSchedules)
     else:
       return Response(json.loads(foundCoordinate.serializedSchedules))
