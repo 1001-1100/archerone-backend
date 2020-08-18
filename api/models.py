@@ -181,6 +181,7 @@ class User(AbstractBaseUser):
     college = models.ForeignKey(College, on_delete=models.CASCADE)
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    first_time_user = models.BooleanField(default=True)
     # schedules = models.ManyToManyField(Schedule)
     is_active = models.BooleanField(default=True)
     objects = UserManager()
@@ -222,6 +223,11 @@ class Schedule(models.Model):
         verbose_name = _('schedule')
         verbose_name_plural = _('schedules')
 
+class CoordinateSchedule(models.Model):
+    shareCode = models.TextField()
+    serializedSchedules = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 class CoursePriority(models.Model):
     courses = models.ForeignKey(Course,on_delete=models.CASCADE)
     priority = models.BooleanField()
@@ -241,7 +247,7 @@ class Preference(models.Model):
     max_courses = models.IntegerField(_('max courses per day'), null=True)
     preferred_faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True) 
     preferred_buildings = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
-    preferred_sections = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
+    preferred_sections = models.TextField(null=True)
     undesirable_classes = models.IntegerField(null=True)
     # course_priority = models.ForeignKey(CoursePriority, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
