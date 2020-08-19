@@ -518,6 +518,7 @@ class SchedulesListFriends(APIView):
         'highCourses': highCourses,
         'lowCourses': lowCourses, 
         'user': int(friend),
+        'name': User.objects.get(id=friend).first_name,
         'preferences': Preference.objects.filter(user=friend),
         'scheduleClasses': scheduleClasses,
         'filterFull': request.data['filterFull'],
@@ -525,9 +526,10 @@ class SchedulesListFriends(APIView):
       allUsers.append(friendUser)
       friends.append(friendUser)
 
-    allUsers.append(mainUser)
-
+    friends.sort(key=lambda x: x['user'], reverse=True)
     allUsers.sort(key=lambda x: x['user'], reverse=True)
+
+    allUsers.append(mainUser)
 
     users = []
 
@@ -571,7 +573,9 @@ class SchedulesListFriends(APIView):
         serializedSchedule['offerings'] = serializer.data
         serializedSchedule['information'] = s['information']
         serializedSchedule['preferences'] = s['preferences']
+        serializedSchedule['friendPreferences'] = s['friendPreferences']
         serializedSchedule['shareCode'] = shareCode
+        serializedSchedule['date'] = now 
         serializedSchedules.append(serializedSchedule)
       serializedBytes = pickle.dumps(serializedSchedules)
       CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
