@@ -532,12 +532,12 @@ class SchedulesListFriends(APIView):
 
     for u in allUsers:
       user = {
-        'highCourses': list(u.highCourses),
-        'lowCourses': list(u.lowCourses),
-        'user': int(u.user),
-        'preferences': list(u.user),
-        'scheduleClasses': list(scheduleClasses),
-        'filterFull': u.filterFull,
+        'highCourses': list(u['highCourses']),
+        'lowCourses': list(u['lowCourses']),
+        'user': int(u['user']),
+        'preferences': list(u['preferences']),
+        'scheduleClasses': list(u['scheduleClasses']),
+        'filterFull': u['filterFull'],
       }
       users.append(user)
 
