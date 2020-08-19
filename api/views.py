@@ -549,29 +549,31 @@ class SchedulesListFriends(APIView):
     now = datetime.now()
     # shareCode = str(now.strftime('%d%m%Y%H%M%S'))
 
-    serializedSchedules = []
-    schedules = solveFriends(mainUser, friends)
-    for s in schedules:
-      serializedSchedule = {}
-      serializer = CourseOfferingSerializer(s['offerings'], many=True)
-      for d in serializer.data:
-        if(d['faculty'] != None):
-          d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
-        d['course_id'] = d['course']
-        d['course'] = Course.objects.get(id=d['course']).course_code
-        d['section'] = Section.objects.get(id=d['section']).section_code  
-        d['day'] = Day.objects.get(id=d['day']).day_code  
-        d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
-        d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
-        if(d['room'] != None):
-          d['room'] = Room.objects.get(id=d['room']).room_name
-      serializedSchedule['offerings'] = serializer.data
-      serializedSchedule['information'] = s['information']
-      serializedSchedule['preferences'] = s['preferences']
-      serializedSchedule['shareCode'] = shareCode
-      serializedSchedules.append(serializedSchedule)
-    serializedBytes = pickle.dumps(serializedSchedules)
-    CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
+    foundCoord = CoordinateSchedule.objects.get(shareCode=shareCode)
+    if(len(foundCoord) <= 0):
+      serializedSchedules = []
+      schedules = solveFriends(mainUser, friends)
+      for s in schedules:
+        serializedSchedule = {}
+        serializer = CourseOfferingSerializer(s['offerings'], many=True)
+        for d in serializer.data:
+          if(d['faculty'] != None):
+            d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+          d['course_id'] = d['course']
+          d['course'] = Course.objects.get(id=d['course']).course_code
+          d['section'] = Section.objects.get(id=d['section']).section_code  
+          d['day'] = Day.objects.get(id=d['day']).day_code  
+          d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+          d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+          if(d['room'] != None):
+            d['room'] = Room.objects.get(id=d['room']).room_name
+        serializedSchedule['offerings'] = serializer.data
+        serializedSchedule['information'] = s['information']
+        serializedSchedule['preferences'] = s['preferences']
+        serializedSchedule['shareCode'] = shareCode
+        serializedSchedules.append(serializedSchedule)
+      serializedBytes = pickle.dumps(serializedSchedules)
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
     return redirect('/coordinate_schedule/'+shareCode)
 
 
