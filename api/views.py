@@ -575,7 +575,7 @@ class SchedulesListFriends(APIView):
         serializedSchedule['preferences'] = s['preferences']
         serializedSchedule['friendPreferences'] = s['friendPreferences']
         serializedSchedule['shareCode'] = shareCode
-        serializedSchedule['owner'] = User.objects.get(id=user).first_name
+        serializedSchedule['owner'] = User.objects.get(id=request.data['user_id']).first_name
         serializedSchedule['date'] = now 
         serializedSchedules.append(serializedSchedule)
       serializedBytes = pickle.dumps(serializedSchedules)
