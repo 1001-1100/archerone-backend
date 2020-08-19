@@ -543,7 +543,7 @@ class SchedulesListFriends(APIView):
       }
       users.append(user)
 
-    hashUsers = hashlib.blake2s(users)
+    hashUsers = hashlib.blake2s(pickle.dumps(users))
 
     print(hashUsers)
 
