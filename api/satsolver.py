@@ -188,6 +188,69 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
         #                                 b = Bool(str(o2.classnumber))
                                         # z3.add(Implies(a,b))
                                         
+def addFriendPreferences(z3, highCourses, preferences):
+    allOfferings = CourseOffering.objects.none()
+    otherPreferences = {}
+    for c in highCourses:
+        offerings = CourseOffering.objects.filter(course=c)
+        allOfferings = allOfferings | offerings
+    for p in preferences:
+        if(p.earliest_class_time != None):
+            earliest = p.earliest_class_time
+            for o in allOfferings:
+                if(earliest > o.timeslot.begin_time):
+                    z3.add_soft(Not(Bool(str(o.classnumber))))
+        if(p.latest_class_time != None):
+            latest = p.latest_class_time
+            for o in allOfferings:
+                if(latest < o.timeslot.end_time):
+                    z3.add_soft(Not(Bool(str(o.classnumber))))
+        if(p.preferred_days != None):
+            day_id = p.preferred_days.id
+            for o in allOfferings:
+                if(day_id == o.day.id):
+                    z3.add_soft(Bool(str(o.classnumber)))
+        if(p.preferred_buildings != None):
+            print(p.preferred_buildings)
+        if(p.preferred_sections != None):
+            section_code = p.preferred_sections
+            for o in allOfferings:
+                if(len(str(section_code)) == 1):
+                    if(str(section_code)[0] == str(o.section.section_code)[0]):
+                        z3.add_soft(Bool(str(o.classnumber)))
+                else:
+                    if(str(section_code) == str(o.section.section_code)):
+                        z3.add_soft(Bool(str(o.classnumber)))
+        if(p.preferred_faculty != None):
+            faculty_id = p.preferred_faculty.id
+            for o in allOfferings:
+                if(o.faculty != None):
+                    if(faculty_id == o.faculty.id):
+                        z3.add_soft(Bool(str(o.classnumber)))
+        if(p.min_courses != None):
+            otherPreferences['min_courses'] = p.min_courses
+        if(p.max_courses != None):
+            otherPreferences['max_courses'] = p.max_courses
+        if(p.undesirable_classes != None):
+            classnumber = p.undesirable_classes
+            z3.add_soft(Not(Bool(str(classnumber))), 10)
+        # if(p.break_length != None):
+        #     break_length = p.break_length
+        #     for o in allOfferings:
+        #         for o2 in allOfferings:
+        #             if(o.section != o2.section or o.course != o2.course):
+        #                 if(o.day == o2.day):
+        #                     if(o.timeslot != o2.timeslot):
+        #                         firstTime = o.timeslot
+        #                         secondTime = o2.timeslot
+        #                         if(firstTime.end_time < secondTime.begin_time):
+        #                             firstEnd = datetime.datetime.combine(datetime.date.today(), firstTime.end_time)
+        #                             secondBegin = datetime.datetime.combine(datetime.date.today(), secondTime.begin_time)
+        #                             difference = (secondBegin - firstEnd).total_seconds() / 60
+        #                             if(abs(difference - break_length) <= 60):
+        #                                 a = Bool(str(o.classnumber))
+        #                                 b = Bool(str(o2.classnumber))
+                                        # z3.add(Implies(a,b))
 
     return otherPreferences
 
@@ -407,6 +470,7 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
                 allOfferings = allOfferings | CourseOffering.objects.filter(classnumber=int(o.name()))
         days = []
         sections = []
+        classnumbers = []
         perDay = {
             'M': [],
             'T': [],
@@ -458,11 +522,15 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
                         max_courses = p.max_courses
                     if(p.break_length != None):
                         break_length = p.break_length
+                    if(p.undesirable_classes != None):
+                        classnumber = p.undesirable_classes
+                        classnumbers.append(classnumber)
 
         for o in model:
             if(model[o]):
                 offerings = CourseOffering.objects.filter(classnumber=int(o.name()))
                 notSections = []
+                notClass = []
                 for o in offerings:
                     if(o.day.id not in days):
                         if(days != []):
@@ -476,6 +544,10 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
                             if(sections != []):
                                 unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' is not a preferred section')
                                 notSections.append(o.course.course_code)
+                    if(o.classnumber in classnumbers):
+                        if(o.course.course_code not in notClass):
+                            unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' is not a preferred class')
+                            notClass.append(o.course.course_code)
 
         if(min_courses != None):
             for d in perDay:
@@ -498,6 +570,8 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
         for c in allCourses:
             if not (c in selectedCourses):
                 unsatisfied.append(c)
+
+
 
         return unsatisfied
 
