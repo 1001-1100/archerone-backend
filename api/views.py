@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from rest_framework import viewsets          
 from .serializers import CustomRegisterSerializer, CoordinateScheduleSerializer, RoomSerializer, SurveySerializer, EnlistSerializer, CartSerializer, FriendRequestSerializer, NotificationSerializer, ScheduleSerializer, TimeslotSerializer, CourseOfferingSerializer, PreferenceSerializer, UserSerializer, CourseSerializer, DegreeSerializer, CollegeSerializer, CoursePrioritySerializer, DaySerializer, FacultySerializer, BuildingSerializer, SectionSerializer, FlowchartTermSerializer
@@ -15,6 +15,7 @@ import _thread
 import json
 import pickle
 import hashlib
+from datetime import datetime
 
 class UserViewSet(viewsets.ModelViewSet):
   serializer_class = UserSerializer
@@ -543,37 +544,35 @@ class SchedulesListFriends(APIView):
       }
       users.append(user)
 
-    hashUsers = hashlib.blake2s(pickle.dumps(users)).hexdigest()
+    shareCode = str(hashlib.blake2s(pickle.dumps(users)).hexdigest())
 
-    print(hashUsers)
+    now = datetime.now()
+    # shareCode = str(now.strftime('%d%m%Y%H%M%S'))
 
-    shareCode = str(randint(10000000, 99999999))
-
-    if(True):
-      serializedSchedules = []
-      schedules = solveFriends(mainUser, friends)
-      for s in schedules:
-        serializedSchedule = {}
-        serializer = CourseOfferingSerializer(s['offerings'], many=True)
-        for d in serializer.data:
-          if(d['faculty'] != None):
-            d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
-          d['course_id'] = d['course']
-          d['course'] = Course.objects.get(id=d['course']).course_code
-          d['section'] = Section.objects.get(id=d['section']).section_code  
-          d['day'] = Day.objects.get(id=d['day']).day_code  
-          d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
-          d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
-          if(d['room'] != None):
-            d['room'] = Room.objects.get(id=d['room']).room_name
-        serializedSchedule['offerings'] = serializer.data
-        serializedSchedule['information'] = s['information']
-        serializedSchedule['preferences'] = s['preferences']
-        serializedSchedule['shareCode'] = shareCode
-        serializedSchedules.append(serializedSchedule)
-      serializedBytes = pickle.dumps(serializedSchedules)
-      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
-      return Response(serializedSchedules)
+    serializedSchedules = []
+    schedules = solveFriends(mainUser, friends)
+    for s in schedules:
+      serializedSchedule = {}
+      serializer = CourseOfferingSerializer(s['offerings'], many=True)
+      for d in serializer.data:
+        if(d['faculty'] != None):
+          d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
+        d['course_id'] = d['course']
+        d['course'] = Course.objects.get(id=d['course']).course_code
+        d['section'] = Section.objects.get(id=d['section']).section_code  
+        d['day'] = Day.objects.get(id=d['day']).day_code  
+        d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
+        d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
+        if(d['room'] != None):
+          d['room'] = Room.objects.get(id=d['room']).room_name
+      serializedSchedule['offerings'] = serializer.data
+      serializedSchedule['information'] = s['information']
+      serializedSchedule['preferences'] = s['preferences']
+      serializedSchedule['shareCode'] = shareCode
+      serializedSchedules.append(serializedSchedule)
+    serializedBytes = pickle.dumps(serializedSchedules)
+    CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
+    return redirect('/coordinate_schedule/'+shareCode)
 
 
 class SchedulesListSuggestions(APIView):
