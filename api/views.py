@@ -549,8 +549,9 @@ class SchedulesListFriends(APIView):
     now = datetime.now()
     # shareCode = str(now.strftime('%d%m%Y%H%M%S'))
 
-    foundCoord = CoordinateSchedule.objects.get(shareCode=shareCode)
-    if(foundCoord.count() <= 0):
+    try:
+      CoordinateSchedule.objects.get(shareCode=shareCode)
+    except CoordinateSchedule.DoesNotExist:
       serializedSchedules = []
       schedules = solveFriends(mainUser, friends)
       for s in schedules:
