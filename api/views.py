@@ -575,7 +575,7 @@ class SchedulesListFriends(APIView):
         serializedSchedules.append(serializedSchedule)
       serializedBytes = pickle.dumps(serializedSchedules)
       CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
-    return redirect('/coordinate_schedule/'+shareCode)
+    return Response(shareCode)
 
 
 class SchedulesListSuggestions(APIView):
