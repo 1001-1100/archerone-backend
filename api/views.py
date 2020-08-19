@@ -531,11 +531,13 @@ class SchedulesListFriends(APIView):
     users = []
 
     for u in allUsers:
+      prefResult = u['preferences'].values()
+      preferences = [p for p in prefResult]
       user = {
         'highCourses': list(u['highCourses']),
         'lowCourses': list(u['lowCourses']),
         'user': int(u['user']),
-        'preferences': list(u['preferences']),
+        'preferences': preferences,
         'scheduleClasses': list(u['scheduleClasses']),
         'filterFull': u['filterFull'],
       }
