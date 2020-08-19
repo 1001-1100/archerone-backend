@@ -543,9 +543,7 @@ class SchedulesListFriends(APIView):
       }
       users.append(user)
 
-    usersJson = json.dumps(users)
-
-    hashUsers = hashlib.blake2s(usersJson)
+    hashUsers = hashlib.blake2s(users)
 
     print(hashUsers)
 
