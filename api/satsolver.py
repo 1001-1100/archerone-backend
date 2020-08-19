@@ -96,7 +96,7 @@ def addFriendConstraints(z3, mainCourses, diffCourses, sameCourses, mainUser, fr
 
     for c in mainUser['scheduleClasses']:
         if(c not in diffClassnumbers):
-            z3.add_soft(c)
+            z3.add_soft(Bool(str(c)))
 
     for o in mainOfferings:
         for o2 in diffOfferings:
