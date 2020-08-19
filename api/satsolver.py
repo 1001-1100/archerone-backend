@@ -90,7 +90,7 @@ def addFriendConstraints(z3, mainCourses, diffCourses, sameCourses, mainUser, fr
         sameOfferings = sameOfferings | offerings
 
     for o in sameOfferings:
-        z3.add_soft(str(o.classnumber))
+        z3.add_soft(Bool(str(o.classnumber)))
     
     diffClassnumbers = list(set(diffClassnumbers))
 
