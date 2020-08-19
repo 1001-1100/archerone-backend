@@ -14,6 +14,7 @@ import string
 import _thread
 import json
 import pickle
+import hashlib
 
 class UserViewSet(viewsets.ModelViewSet):
   serializer_class = UserSerializer
@@ -526,6 +527,25 @@ class SchedulesListFriends(APIView):
     allUsers.append(mainUser)
 
     allUsers.sort(key=lambda x: x['user'], reverse=True)
+
+    users = []
+
+    for u in allUsers:
+      user = {
+        'highCourses': list(u.highCourses),
+        'lowCourses': list(u.lowCourses),
+        'user': int(u.user),
+        'preferences': list(u.user),
+        'scheduleClasses': list(scheduleClasses),
+        'filterFull': u.filterFull,
+      }
+      users.append(user)
+
+    usersJson = json.dumps(users)
+
+    hashUsers = hashlib.blake2s(usersJson)
+
+    print(hashUsers)
 
     shareCode = str(randint(10000000, 99999999))
 
