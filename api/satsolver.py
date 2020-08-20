@@ -489,12 +489,14 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
                         earliest = p.earliest_class_time
                         for o in offerings:
                             if(earliest > o.timeslot.begin_time):
-                                unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts earlier than '+str(earliest))
+                                pass
+                                # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts earlier than '+str(earliest))
                     if(p.latest_class_time != None):
                         latest = p.latest_class_time
                         for o in offerings:
                             if(latest < o.timeslot.end_time):
-                                unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts later than '+str(latest))
+                                pass
+                                # unsatisfied.append(str(o.course.course_code)+' '+o.section.section_code+' ('+o.day.day_code+')'+' starts later than '+str(latest))
                     if(p.preferred_days != None):
                         day = p.preferred_days.id
                         days.append(day)
