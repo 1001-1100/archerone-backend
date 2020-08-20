@@ -797,7 +797,7 @@ def solveEdit(classes, newclasses, courses):
     print(selectedCourses)
     print(allCourses)
 
-    schedule['offerings'] = offerings
+    # schedule['offerings'] = offerings
     schedule['rejected'] = set(rejected)
     schedule['classnumbers'] = set(selectedNumbers)
 
