@@ -767,6 +767,10 @@ def solveEdit(classes, newclasses, courses):
     z3.check()
     model = z3.model()
     offerings = CourseOffering.objects.none() 
+    print(model)
+    print(classes)
+    print(newclasses)
+    print(courses)
     for o in model:
         if(model[o]):
             try:
@@ -789,6 +793,10 @@ def solveEdit(classes, newclasses, courses):
     for c in allCourses:
         if not (c in selectedCourses):
             rejected.append(c)
+    
+    print(schedule)
+    print(selectedCourses)
+    print(allCourses)
 
     schedule['offerings'] = offerings
     schedule['rejected'] = set(rejected)
