@@ -313,15 +313,16 @@ class CourseOfferingsListSingle(APIView):
 class EditSchedule(APIView):
   def post(self, request, format=None):
     courses = []
-    classnumbers = []
+    classes = []
+    newclasses = []
     for c in request.data['courses']:
       courses.append(c)
-    for c in request.data['classnumbers']:
-      classnumbers.append(c)
-    user = request.data['user_id']
-    sched_id = request.data['sched_id']
+    for c in request.data['classes']:
+      classes.append(c)
+    for c in request.data['newclasses']:
+      newclasses.append(c)
 
-    schedule = solveEdit(courses, classnumbers)
+    schedule = solveEdit(classes, newclasses, courses)
 
     # serializer = CourseOfferingSerializer(schedule['offerings'], many=True)
 
