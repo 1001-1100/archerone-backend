@@ -323,30 +323,24 @@ class EditSchedule(APIView):
 
     schedule = solveEdit(courses, classnumbers)
 
+    # serializer = CourseOfferingSerializer(schedule['offerings'], many=True)
+
+    # serializedSchedule = {}
+    # serializedSchedule['offerings'] = serializer.data
+    # serializedSchedule['rejected'] = schedule['rejected']
+
+    return Response(schedule['rejected'])
+
+class SaveEditSchedule(APIView):
+  def post(self, request, format=None):
+    sched_id = request.data['sched_id']
     old_sched = Schedule.objects.get(id=sched_id)
     old_sched.courseOfferings.clear()
-    for o in schedule['offerings']:
-      old_sched.courseOfferings.add(o)
+    for c in request.data['classnumbers']:
+      for o in CourseOffering.objects.filter(classnumber=c):
+        old_sched.courseOfferings.add(o)
     old_sched.save()
-
-    serializer = CourseOfferingSerializer(schedule['offerings'], many=True)
-    for d in serializer.data:
-      if(d['faculty'] != None):
-        d['faculty'] = Faculty.objects.get(id=d['faculty']).full_name
-      d['course_id'] = d['course']
-      d['course'] = Course.objects.get(id=d['course']).course_code
-      d['section'] = Section.objects.get(id=d['section']).section_code  
-      d['day'] = Day.objects.get(id=d['day']).day_code  
-      d['timeslot_begin'] = Timeslot.objects.get(id=d['timeslot']).begin_time  
-      d['timeslot_end'] = Timeslot.objects.get(id=d['timeslot']).end_time
-      if(d['room'] != None):
-        d['room'] = Room.objects.get(id=d['room']).room_name
-
-    serializedSchedule = {}
-    serializedSchedule['offerings'] = serializer.data
-    serializedSchedule['rejected'] = schedule['rejected']
-
-    return Response(serializedSchedule)
+    return Response(None)
 
 class CheckConflicts(APIView):
   def post(self, request, format=None):
