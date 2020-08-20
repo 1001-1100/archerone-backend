@@ -330,7 +330,7 @@ class EditSchedule(APIView):
     # serializedSchedule['offerings'] = serializer.data
     # serializedSchedule['rejected'] = schedule['rejected']
 
-    return Response(schedule['rejected'])
+    return Response(schedule)
 
 class SaveEditSchedule(APIView):
   def post(self, request, format=None):

@@ -773,14 +773,12 @@ def solveEdit(classes, newclasses, courses):
     print(courses)
     for o in model:
         if(model[o]):
-            try:
-                offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
-            except:
-                pass
+            offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
 
     schedule = {}
     allCourses = []
     selectedCourses = []
+    selectedNumbers = []
     rejected = []
 
     for c in courses:
@@ -788,6 +786,7 @@ def solveEdit(classes, newclasses, courses):
 
     for o in offerings:
         selectedCourses.append(o.course.course_code)
+        selectedNumbers.append(o.course.classnumber)
     selectedCourses = set(selectedCourses)
 
     for c in allCourses:
@@ -800,6 +799,7 @@ def solveEdit(classes, newclasses, courses):
 
     schedule['offerings'] = offerings
     schedule['rejected'] = set(rejected)
+    schedule['classnumbers'] = set(selectedNumbers)
 
     return schedule 
 
