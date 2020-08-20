@@ -571,7 +571,7 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
             
         for c in allCourses:
             if not (c in selectedCourses):
-                unsatisfied.append(c)
+                unsatisfied.append(c+' does not fit with this schedule.')
 
         return unsatisfied
 
