@@ -671,7 +671,7 @@ def solveFriends(mainUser, friends):
     otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
 
     for f in friends:
-        otherPreferences = addPreferencesOfFriends(z3, sameCourses, f['preferences'])
+        otherPreferences = addFriendPreferences(z3, sameCourses, f['preferences'])
 
     schedules = []
 
