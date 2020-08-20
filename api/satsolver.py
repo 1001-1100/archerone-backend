@@ -786,7 +786,7 @@ def solveEdit(classes, newclasses, courses):
 
     for o in offerings:
         selectedCourses.append(o.course.course_code)
-        selectedNumbers.append(o.course.classnumber)
+        selectedNumbers.append(o.classnumber)
     selectedCourses = set(selectedCourses)
 
     for c in allCourses:
