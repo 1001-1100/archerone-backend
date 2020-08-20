@@ -233,7 +233,7 @@ def addFriendPreferences(z3, highCourses, preferences):
             otherPreferences['max_courses'] = p.max_courses
         if(p.undesirable_classes != None):
             classnumber = p.undesirable_classes
-            z3.add_soft(Not(Bool(str(classnumber))), 10)
+            z3.add_soft(Not(Bool(str(classnumber))), 2)
         # if(p.break_length != None):
         #     break_length = p.break_length
         #     for o in allOfferings:
@@ -671,7 +671,7 @@ def solveFriends(mainUser, friends):
     otherPreferences = addPreferences(z3, mainUser['highCourses'], mainUser['lowCourses'], mainUser['preferences'])
 
     for f in friends:
-        otherPreferences = addPreferences(z3, sameCourses, sameCourses, f['preferences'])
+        otherPreferences = addPreferencesOfFriends(z3, sameCourses, f['preferences'])
 
     schedules = []
 
