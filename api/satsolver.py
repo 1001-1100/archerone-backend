@@ -769,6 +769,8 @@ def solveEdit(classes, newclasses, courses):
     offerings = CourseOffering.objects.none() 
     for o in model:
         if(model[o]):
+            print(o)
+            print(o.name())
             offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
 
     schedule = {}
