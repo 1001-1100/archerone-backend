@@ -571,8 +571,6 @@ def checkPreferencesFriendsOther(offerings, mainCourses, friends):
             if not (c in selectedCourses):
                 unsatisfied.append(c)
 
-
-
         return unsatisfied
 
 def addExtraConstraints(z3, model):
