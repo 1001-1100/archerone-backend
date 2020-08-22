@@ -319,47 +319,49 @@ def solveFriends(users):
 
     schedules = []
 
-    for i in range(0, 10):
-        z3.check()
-        model = z3.model()
-        numbers = []
-        # schedule = {}
-        # information = []
-        # selectedCourses = []
-        # offerings = CourseOffering.objects.none() 
-        for o in model:
-            if(model[o]):
-                print(o.name())
-                numbers.append(o.name())
-                # offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
-        # if(len(offerings) == 0):
-        #     break
-        # newOfferings = []
-        # for o in offerings:
-        #     if(o.course.id in u['highCourses'] or o.course.id in u['lowCourses']):
-        #         newOfferings.append(o)
-        #         selectedCourses.append(o.course.course_code)
-        # offerings = newOfferings
-        # selectedCourses = set(selectedCourses)
-        # allCourses = []
-        # for c in u['highCourses']:
-        #     allCourses.append(Course.objects.get(id=c).course_code)
-        # for c in u['lowCourses']:
-        #     allCourses.append(Course.objects.get(id=c).course_code)
-            
-        # for c in allCourses:
-        #     if not (c in selectedCourses):
-        #         information.append(c)
-            
-        # schedule['offerings'] = offerings
-        # schedule['information'] = set(information)
-        # schedule['preferences'] = checkPreferences(z3, model, u['preferences'])
-        # print(schedule['information'])
-        # print(schedule['preferences'])
-        # schedules.append(schedule)
+    # for i in range(0, 10):
+    print(z3)
+    z3.check()
+    model = z3.model()
+    numbers = []
+    print(model)
+    # schedule = {}
+    # information = []
+    # selectedCourses = []
+    # offerings = CourseOffering.objects.none() 
+    for o in model:
+        if(model[o]):
+            print(o.name())
+            numbers.append(o.name())
+            # offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
+    # if(len(offerings) == 0):
+    #     break
+    # newOfferings = []
+    # for o in offerings:
+    #     if(o.course.id in u['highCourses'] or o.course.id in u['lowCourses']):
+    #         newOfferings.append(o)
+    #         selectedCourses.append(o.course.course_code)
+    # offerings = newOfferings
+    # selectedCourses = set(selectedCourses)
+    # allCourses = []
+    # for c in u['highCourses']:
+    #     allCourses.append(Course.objects.get(id=c).course_code)
+    # for c in u['lowCourses']:
+    #     allCourses.append(Course.objects.get(id=c).course_code)
+        
+    # for c in allCourses:
+    #     if not (c in selectedCourses):
+    #         information.append(c)
+        
+    # schedule['offerings'] = offerings
+    # schedule['information'] = set(information)
+    # schedule['preferences'] = checkPreferences(z3, model, u['preferences'])
+    # print(schedule['information'])
+    # print(schedule['preferences'])
+    # schedules.append(schedule)
 
-        # addExtraConstraintsFriends(z3, offerings)
+    # addExtraConstraintsFriends(z3, offerings)
 
-        # addSoftConstraints(z3, u['highCourses'], u['lowCourses'])
+    # addSoftConstraints(z3, u['highCourses'], u['lowCourses'])
 
     return numbers 
