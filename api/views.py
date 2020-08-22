@@ -551,6 +551,7 @@ class SchedulesListFriends(APIView):
 
     try:
       CoordinateSchedule.objects.get(shareCode=shareCode)
+      return Response(shareCode)
     except CoordinateSchedule.DoesNotExist:
       serializedSchedules = []
       schedules = solveFriends(allUsers)
@@ -579,7 +580,7 @@ class SchedulesListFriends(APIView):
       #   serializedSchedules.append(serializedSchedule)
       # serializedBytes = pickle.dumps(serializedSchedules)
       # CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
-    return Response(schedules)
+      return Response(schedules)
 
 
 class SchedulesListSuggestions(APIView):
