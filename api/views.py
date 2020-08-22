@@ -574,7 +574,6 @@ class SchedulesListFriends(APIView):
           serializedSchedule['offerings'] = serializer.data
           serializedSchedule['information'] = s['information']
           serializedSchedule['preferences'] = s['preferences']
-          serializedSchedule['friendPreferences'] = s['friendPreferences']
           serializedSchedule['shareCode'] = shareCode
           serializedSchedule['owner'] = User.objects.get(id=request.data['user_id']).first_name
           serializedSchedule['friends'] = friendNames
