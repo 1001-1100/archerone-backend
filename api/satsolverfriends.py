@@ -280,9 +280,10 @@ def removeFriendsConstraint(z3, user, allCourses):
     print(diffCourses)
     for c in diffCourses:
         offerings = CourseOffering.objects.filter(course=c)
-        # for o in offerings:
-        #     a = Not(Bool(str(user['user'])+str(o.classnumber)))
-        #     z3.add(a)
+        for o in offerings:
+            print(user['user'],o.classnumber)
+            a = Not(Bool(str(user['user'])+str(o.classnumber)))
+            z3.add(a)
 
 def addFriendsConstraints(z3, users):
     idList = []
