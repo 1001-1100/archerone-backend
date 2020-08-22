@@ -169,7 +169,7 @@ def addPreferences(z3, highCourses, lowCourses, preferences):
             otherPreferences['max_courses'] = p.max_courses
         if(p.undesirable_classes != None):
             classnumber = p.undesirable_classes
-            z3.add(Not(Bool(str(classnumber))))
+            z3.add_soft(Not(Bool(str(classnumber))), 100)
         # if(p.break_length != None):
         #     break_length = p.break_length
         #     for o in allOfferings:
@@ -717,6 +717,79 @@ def solveFriends(mainUser, friends):
         addSoftConstraints(z3, mainUser['highCourses'], mainUser['lowCourses'])
         for f in friends:
             addSoftConstraints(z3, f['highCourses'], f['lowCourses'])
+
+    return schedules 
+
+
+def removeFriendsConstraint(z3, user, allCourses):
+    diffCourses = list(set(allCourses) - set(user['highCourses'] + user['lowCourses']))
+    for c in diffCourses:
+        offerings = CourseOffering.objects.filter(course=c)
+        for o in offerings:
+            a = Not(Bool(str(o.classnumber)))
+            z3.add(a)
+
+def solveFriendsMulti(users):
+    z3 = Optimize()
+
+    highCourses = []
+    lowCourses = []
+    for u in users:
+        highCourses += u['highCourses']
+        lowCourses += u['lowCourses']
+        addHardConstraints(z3, u['highCourses'], u['lowCourses'], u['filterFull'])
+        addSoftConstraints(z3, u['highCourses'], u['lowCourses'])
+        addPreferences(z3, u['highCourses'], u['lowCourses'], u['preferences'])
+
+    highCourses = list(set(highCourses))
+    lowCourses = list(set(highCourses))
+    allCourses = highCourses + lowCourses
+
+    schedules = []
+
+    for u in users:
+        for i in range(0, 10):
+            tempz3 = z3
+            removeFriendsConstraint(tempz3, u, allCourses)
+            tempz3.check()
+            model = tempz3.model()
+            schedule = {}
+            information = []
+            selectedCourses = []
+            offerings = CourseOffering.objects.none() 
+            for o in model:
+                if(model[o]):
+                    offerings = offerings | CourseOffering.objects.filter(classnumber=int(o.name()))
+            if(len(offerings) == 0):
+                break
+            newOfferings = []
+            for o in offerings:
+                if(o.course.id in u['highCourses'] or o.course.id in u['lowCourses']):
+                    newOfferings.append(o)
+                    selectedCourses.append(o.course.course_code)
+            offerings = newOfferings
+            selectedCourses = set(selectedCourses)
+            allCourses = []
+            for c in u['highCourses']:
+                allCourses.append(Course.objects.get(id=c).course_code)
+            for c in u['lowCourses']:
+                allCourses.append(Course.objects.get(id=c).course_code)
+                
+            for c in allCourses:
+                if not (c in selectedCourses):
+                    information.append(c)
+                
+            schedule['offerings'] = offerings
+            schedule['information'] = set(information)
+            schedule['preferences'] = checkPreferencesFriends(offerings, u['preferences'])
+            schedule['friendPreferences'] = checkPreferencesFriendsOther(offerings, u, u)
+            print(schedule['information'])
+            print(schedule['preferences'])
+            schedules.append(schedule)
+
+            addExtraConstraintsFriends(z3, offerings)
+
+            addSoftConstraints(z3, u['highCourses'], u['lowCourses'])
 
     return schedules 
 
