@@ -268,11 +268,10 @@ def checkPreferences(offerings, preferences):
                 unsatisfied.append(str(d)+' has more than '+str(max_courses)+' courses')
     return unsatisfied
 
-def addExtraConstraints(z3, u, model):
+def addExtraConstraints(z3, u, offerings):
     current = []
-    for o in model:
-        if(model[o]):
-            current.append((Not(Bool(str(u['user'])+str(o)))))
+    for o in offerings:
+        current.append((Not(Bool(str(u['user'])+str(o.classnumber)))))
     z3.add(Or(tuple(current)))
 
 def addExtraConstraintsFriends(z3, offerings):
