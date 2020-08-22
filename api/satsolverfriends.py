@@ -169,7 +169,7 @@ def addPreferences(z3, user, highCourses, lowCourses, preferences):
             otherPreferences['max_courses'] = p.max_courses
         if(p.undesirable_classes != None):
             classnumber = p.undesirable_classes
-            z3.add_soft(Not(Bool(str(user['user'])+str(o.classnumber))),100)
+            z3.add_soft(Not(Bool(str(user['user'])+str(classnumber))),100)
 
 def checkPreferences(z3, model, preferences):
     unsatisfied = []
