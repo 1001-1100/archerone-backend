@@ -68,58 +68,58 @@ def addSoftConstraints(z3, user, highCourses, lowCourses):
     #     a = Not(Bool(str(o['classNmbr'])))
     #     z3.add_soft(a, 10)
 
-def addFriendConstraints(z3, mainCourses, diffCourses, sameCourses, mainUser, friends):
+# def addFriendConstraints(z3, mainCourses, diffCourses, sameCourses, mainUser, friends):
 
-    mainOfferings = CourseOffering.objects.none()
-    diffOfferings = CourseOffering.objects.none()
-    sameOfferings = CourseOffering.objects.none()
-    diffClassnumbers = []
+#     mainOfferings = CourseOffering.objects.none()
+#     diffOfferings = CourseOffering.objects.none()
+#     sameOfferings = CourseOffering.objects.none()
+#     diffClassnumbers = []
 
-    for c in mainCourses:
-        offerings = CourseOffering.objects.filter(course=c)
-        mainOfferings = mainOfferings | offerings
+#     for c in mainCourses:
+#         offerings = CourseOffering.objects.filter(course=c)
+#         mainOfferings = mainOfferings | offerings
 
-    for c in diffCourses:
-        offerings = CourseOffering.objects.filter(course=c)
-        for o in offerings:
-            diffClassnumbers.append(o.classnumber)
-        diffOfferings = diffOfferings | offerings
+#     for c in diffCourses:
+#         offerings = CourseOffering.objects.filter(course=c)
+#         for o in offerings:
+#             diffClassnumbers.append(o.classnumber)
+#         diffOfferings = diffOfferings | offerings
 
-    for c in sameCourses:
-        offerings = CourseOffering.objects.filter(course=c)
-        sameOfferings = sameOfferings | offerings
+#     for c in sameCourses:
+#         offerings = CourseOffering.objects.filter(course=c)
+#         sameOfferings = sameOfferings | offerings
 
-    for o in sameOfferings:
-        z3.add_soft(Bool(str(o.classnumber)))
+#     for o in sameOfferings:
+#         z3.add_soft(Bool(str(o.classnumber)))
     
-    diffClassnumbers = list(set(diffClassnumbers))
+#     diffClassnumbers = list(set(diffClassnumbers))
 
-    for c in mainUser['scheduleClasses']:
-        if(c not in diffClassnumbers):
-            z3.add_soft(Bool(str(c)))
+#     for c in mainUser['scheduleClasses']:
+#         if(c not in diffClassnumbers):
+#             z3.add_soft(Bool(str(c)))
 
-    for o in mainOfferings:
-        for o2 in diffOfferings:
-            if(o.day == o2.day):
-                if(o.timeslot == o2.timeslot):
-                    a = Bool(str(o.classnumber))
-                    b = Bool(str(o2.classnumber))
-                    z3.add_soft(Implies(a,b),2)
-                else:
-                    firstTime = o.timeslot
-                    secondTime = o2.timeslot
-                    if(firstTime.begin_time >= secondTime.begin_time and firstTime.begin_time <= secondTime.end_time):
-                        a = Bool(str(o.classnumber))
-                        b = Bool(str(o2.classnumber))
-                        z3.add_soft(Implies(a,b))
-                    elif(firstTime.end_time >= secondTime.begin_time and firstTime.end_time <= secondTime.end_time):
-                        a = Bool(str(o.classnumber))
-                        b = Bool(str(o2.classnumber))
-                        z3.add_soft(Implies(a,b))
-                    elif(firstTime.end_time >= secondTime.end_time and firstTime.begin_time <= secondTime.end_time):
-                        a = Bool(str(o.classnumber))
-                        b = Bool(str(o2.classnumber))
-                        z3.add_soft(Implies(a,b))
+#     for o in mainOfferings:
+#         for o2 in diffOfferings:
+#             if(o.day == o2.day):
+#                 if(o.timeslot == o2.timeslot):
+#                     a = Bool(str(o.classnumber))
+#                     b = Bool(str(o2.classnumber))
+#                     z3.add_soft(Implies(a,b),2)
+#                 else:
+#                     firstTime = o.timeslot
+#                     secondTime = o2.timeslot
+#                     if(firstTime.begin_time >= secondTime.begin_time and firstTime.begin_time <= secondTime.end_time):
+#                         a = Bool(str(o.classnumber))
+#                         b = Bool(str(o2.classnumber))
+#                         z3.add_soft(Implies(a,b))
+#                     elif(firstTime.end_time >= secondTime.begin_time and firstTime.end_time <= secondTime.end_time):
+#                         a = Bool(str(o.classnumber))
+#                         b = Bool(str(o2.classnumber))
+#                         z3.add_soft(Implies(a,b))
+#                     elif(firstTime.end_time >= secondTime.end_time and firstTime.begin_time <= secondTime.end_time):
+#                         a = Bool(str(o.classnumber))
+#                         b = Bool(str(o2.classnumber))
+#                         z3.add_soft(Implies(a,b))
 
 def addPreferences(z3, user, highCourses, lowCourses, preferences):
     allOfferings = CourseOffering.objects.none()
@@ -317,7 +317,7 @@ def solveFriends(users):
         addSoftConstraints(z3, u, u['highCourses'], u['lowCourses'])
         addPreferences(z3, u, u['highCourses'], u['lowCourses'], u['preferences'])
 
-    addFriendsConstraints(z3, users)
+    # addFriendsConstraints(z3, users)
 
     highCourses = list(set(highCourses))
     lowCourses = list(set(highCourses))
@@ -344,12 +344,8 @@ def solveFriends(users):
                         offerings = offerings | CourseOffering.objects.filter(classnumber=int(str(o.name())[1:]))
             if(len(offerings) == 0):
                 break
-            newOfferings = []
             for o in offerings:
-                if(o.course.id in u['highCourses'] or o.course.id in u['lowCourses']):
-                    newOfferings.append(o)
-                    selectedCourses.append(o.course.course_code)
-            offerings = newOfferings
+                selectedCourses.append(o.course.course_code)
             selectedCourses = set(selectedCourses)
             allCourses = []
             for c in u['highCourses']:
