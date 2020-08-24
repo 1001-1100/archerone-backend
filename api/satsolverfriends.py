@@ -292,7 +292,6 @@ def removeFriendsConstraint(z3, user, allCourses):
             z3.add(a)
 
 def addFriendsConstraints(z3, users):
-    idList = []
     for u in users:
         for c in u['highCourses'] + u['lowCourses']:
             offerings = CourseOffering.objects.filter(course=c)
@@ -328,9 +327,9 @@ def solveFriends(users):
 
     schedules = {}
     for u in users:
-        schedules[u['user']] = []
+        schedules[u['name']] = []
 
-    for i in range(0, 10):
+    for i in range(0, 3):
         z3.check()
         model = z3.model()
         for u in users:
@@ -360,9 +359,10 @@ def solveFriends(users):
             schedule['offerings'] = offerings
             schedule['information'] = set(information)
             schedule['preferences'] = checkPreferences(offerings, u['preferences'])
+            schedule['user'] = u['name']
             print(schedule['information'])
             print(schedule['preferences'])
-            schedules[u['user']].append(schedule)
+            schedules[u['name']].append(schedule)
 
         addExtraConstraints(z3, u, offerings)
         # addSoftConstraints(z3, u['highCourses'], u['lowCourses'])

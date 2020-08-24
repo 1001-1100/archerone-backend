@@ -487,18 +487,20 @@ class SchedulesListFriends(APIView):
         scheduleClasses.append(o.classnumber)
     
     allUsers = []
+    name = User.objects.get(id=int(user)).first_name
 
     mainUser = {
       'highCourses': highCourses,
       'lowCourses': lowCourses,
       'user': int(user),
+      'name': name,
       'preferences': preferences,
       'scheduleClasses': scheduleClasses,
       'filterFull': filterFull,
     }
 
     friends = []
-    friendNames = []
+    friendNames = [name]
 
     for friend in request.data['friends']:
       highCourses = []
@@ -575,12 +577,11 @@ class SchedulesListFriends(APIView):
           serializedSchedule['information'] = s['information']
           serializedSchedule['preferences'] = s['preferences']
           serializedSchedule['shareCode'] = shareCode
-          serializedSchedule['owner'] = User.objects.get(id=request.data['user_id']).first_name
           serializedSchedule['friends'] = friendNames
           serializedSchedule['date'] = now 
           schedules[r].append(serializedSchedule)
     serializedBytes = pickle.dumps(schedules)
-    # CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
+    CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
     return Response(schedules)
 
 
