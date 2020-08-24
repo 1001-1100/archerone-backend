@@ -294,16 +294,16 @@ def removeFriendsConstraint(z3, user, allCourses):
 def addFriendsConstraints(z3, users):
     idList = []
     for u in users:
-        idList.append(u['user'])
-    for u in users:
         for c in u['highCourses'] + u['lowCourses']:
             offerings = CourseOffering.objects.filter(course=c)
             for o in offerings:
                 a = Bool(str(u['user'])+str(o.classnumber))
-                for i in idList:
-                    if(i != u['user']):
-                        b = Bool(str(i)+str(o.classnumber))
-                        z3.add_soft(Implies(a,b), 50)
+                for u2 in users:
+                    if(u != u2):
+                        courses = u2['highCourses'] + u2['lowCourses'] 
+                        if(o.course in courses):
+                            b = Bool(str(u2['user'])+str(o.classnumber))
+                            z3.add_soft(Implies(a,b), 50)
 
 def solveFriends(users):
     z3 = Optimize()
@@ -317,7 +317,7 @@ def solveFriends(users):
         addSoftConstraints(z3, u, u['highCourses'], u['lowCourses'])
         addPreferences(z3, u, u['highCourses'], u['lowCourses'], u['preferences'])
 
-    # addFriendsConstraints(z3, users)
+    addFriendsConstraints(z3, users)
 
     highCourses = list(set(highCourses))
     lowCourses = list(set(highCourses))
