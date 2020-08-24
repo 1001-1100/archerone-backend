@@ -317,7 +317,7 @@ def solveFriends(users):
         addSoftConstraints(z3, u, u['highCourses'], u['lowCourses'])
         addPreferences(z3, u, u['highCourses'], u['lowCourses'], u['preferences'])
 
-    # addFriendsConstraints(z3, users)
+    addFriendsConstraints(z3, users)
 
     highCourses = list(set(highCourses))
     lowCourses = list(set(highCourses))
