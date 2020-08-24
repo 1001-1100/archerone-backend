@@ -580,9 +580,9 @@ class SchedulesListFriends(APIView):
           serializedSchedule['friends'] = friendNames
           serializedSchedule['date'] = now 
           schedules[r].append(serializedSchedule)
-    serializedBytes = pickle.dumps(schedules)
-    CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
-    return Response(schedules)
+      serializedBytes = pickle.dumps(schedules)
+      CoordinateSchedule(shareCode=shareCode, serializedSchedules=serializedBytes).save()
+    return Response(shareCode)
 
 
 class SchedulesListSuggestions(APIView):
