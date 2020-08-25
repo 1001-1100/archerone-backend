@@ -274,12 +274,6 @@ def addExtraConstraints(z3, u, offerings):
         current.append((Not(Bool(str(u['user'])+str(o.classnumber)))))
     z3.add(Or(tuple(current)))
 
-def addExtraConstraintsFriends(z3, offerings):
-    current = []
-    for o in offerings:
-        current.append(Not(Bool(str(o.classnumber))))
-    z3.add(Or(tuple(current)))
-
 def removeFriendsConstraint(z3, user, allCourses):
     diffCourses = list(set(allCourses) - set(user['highCourses'] + user['lowCourses']))
     print("diffCourses")
@@ -368,8 +362,7 @@ def solveFriends(users):
             print(schedule['information'])
             print(schedule['preferences'])
             schedules[u['name']].append(schedule)
-
-        addExtraConstraints(z3, u, offerings)
-        # addSoftConstraints(z3, u['highCourses'], u['lowCourses'])
+            addExtraConstraints(z3, u, offerings)
+            addSoftConstraints(z3, u, u['highCourses'], u['lowCourses'])
 
     return schedules 
