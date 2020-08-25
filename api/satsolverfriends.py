@@ -135,7 +135,7 @@ def addPreferences(z3, user, highCourses, lowCourses, preferences):
             earliest = p.earliest_class_time
             for o in allOfferings:
                 if(earliest > o.timeslot.begin_time):
-                    z3.add_soft(Not(Bool(str(user['user'])+str(o.classnumber))),2)
+                    z3.add_soft(Not(Bool(str(user['user'])+str(o.classnumber))),10)
         if(p.latest_class_time != None):
             latest = p.latest_class_time
             for o in allOfferings:
@@ -153,10 +153,10 @@ def addPreferences(z3, user, highCourses, lowCourses, preferences):
             for o in allOfferings:
                 if(len(str(section_code)) == 1):
                     if(str(section_code)[0] == str(o.section.section_code)[0]):
-                        z3.add_soft(Bool(str(user['user'])+str(o.classnumber)), 2)
+                        z3.add_soft(Bool(str(user['user'])+str(o.classnumber)), 10)
                 else:
                     if(str(section_code) == str(o.section.section_code)):
-                        z3.add_soft(Bool(str(user['user'])+str(o.classnumber)), 2)
+                        z3.add_soft(Bool(str(user['user'])+str(o.classnumber)), 10)
         if(p.preferred_faculty != None):
             faculty_id = p.preferred_faculty.id
             for o in allOfferings:
@@ -304,6 +304,9 @@ def addFriendsConstraints(z3, users):
                             print(o.course)
                             b = Bool(str(u2['user'])+str(o.classnumber))
                             z3.add_soft(Implies(a,b), 50)
+        for c in u['scheduleClasses']:
+            a = Bool(str(u['user'])+str(c))
+            z3.add_soft(a, 25)
 
 def solveFriends(users):
     z3 = Optimize()
