@@ -559,8 +559,8 @@ class SchedulesListFriends(APIView):
       for r in results:
         schedules[r] = []
       for r in results:
-        serializedSchedule = {}
         for s in results[r]:
+          serializedSchedule = {}
           serializer = CourseOfferingSerializer(s['offerings'], many=True)
           for d in serializer.data:
             if(d['faculty'] != None):
