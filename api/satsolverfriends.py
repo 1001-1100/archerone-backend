@@ -269,10 +269,12 @@ def checkPreferences(offerings, preferences):
     return unsatisfied
 
 def addExtraConstraints(z3, u, offerings):
+    print("adding extra constraints")
     current = []
     for o in offerings:
         current.append((Not(Bool(str(u['user'])+str(o.classnumber)))))
     z3.add(Or(tuple(current)))
+    print(current)
 
 def removeFriendsConstraint(z3, user, allCourses):
     diffCourses = list(set(allCourses) - set(user['highCourses'] + user['lowCourses']))
@@ -330,7 +332,7 @@ def solveFriends(users):
 
     for i in range(0, 3):
         print("creating schedule", i)
-        print(z3.assertions())
+        print(len(z3.assertions()))
         z3.check()
         model = z3.model()
         for u in users:
