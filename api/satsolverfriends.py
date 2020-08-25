@@ -360,6 +360,7 @@ def solveFriends(users):
                     information.append(c)
                 
             schedule['offerings'] = offerings
+            print(offerings)
             schedule['information'] = set(information)
             schedule['preferences'] = checkPreferences(offerings, u['preferences'])
             schedule['user'] = u['name']
