@@ -303,7 +303,7 @@ def addFriendsConstraints(z3, users):
                         print("check implies!")
                         print(o.course)
                         print(courses)
-                        if(int(o.course) in courses):
+                        if(int(o.course.id) in courses):
                             print("implies!")
                             print(o.course)
                             b = Bool(str(u2['user'])+str(o.classnumber))
