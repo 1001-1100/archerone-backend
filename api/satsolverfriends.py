@@ -302,7 +302,7 @@ def addFriendsConstraints(z3, users):
                         courses = u2['highCourses'] + u2['lowCourses'] 
                         if(o.course in courses):
                             b = Bool(str(u2['user'])+str(o.classnumber))
-                            z3.add_soft(Implies(a,b), 50)
+                            z3.add(Implies(a,b), 100)
 
 def solveFriends(users):
     z3 = Optimize()
