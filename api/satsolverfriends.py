@@ -350,8 +350,8 @@ def solveFriends(users):
                     n = o.name()
                     # 01234
                     # 5
-                    if(int(str(n)[:len(n)-5]) == int(u['user'])):
-                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(str(n)[:len(n)-5]))
+                    if(int(str(n)[:len(n)-4]) == int(u['user'])):
+                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(str(n)[:len(n)-4]))
             if(len(offerings) == 0):
                 break
             for o in offerings:
