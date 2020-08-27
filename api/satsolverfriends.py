@@ -336,8 +336,10 @@ def solveFriends(users):
     for i in range(0, 3):
         print("creating schedule", i)
         print(len(z3.assertions()))
+        print(z3.assertions())
         z3.check()
         model = z3.model()
+        print(model)
         for u in users:
             schedule = {}
             information = []

@@ -528,8 +528,8 @@ class SchedulesListFriends(APIView):
       friendNames.append(name)
 
     allUsers.append(mainUser)
-    friends.sort(key=lambda x: x['user'], reverse=True)
-    allUsers.sort(key=lambda x: x['user'], reverse=True)
+    friends.sort(key=lambda x: x['name'])
+    allUsers.sort(key=lambda x: x['name'])
 
     users = []
 
