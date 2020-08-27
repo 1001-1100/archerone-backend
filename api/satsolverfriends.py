@@ -349,9 +349,10 @@ def solveFriends(users):
                 if(model[o]):
                     n = str(o.name())
                     userNum = str(n[:len(n)-4])
-                    print(n, userNum)
+                    cN = str(n[len(n)-4:])
+                    print(n, userNum, cN)
                     if(int(userNum) == int(u['user'])):
-                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(userNum))
+                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(cN))
             if(len(offerings) == 0):
                 break
             for o in offerings:
