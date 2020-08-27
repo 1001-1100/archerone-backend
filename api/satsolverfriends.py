@@ -347,8 +347,11 @@ def solveFriends(users):
             offerings = CourseOffering.objects.none()
             for o in model:
                 if(model[o]):
-                    if(int(str(o.name())[0]) == int(u['user'])):
-                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(str(o.name())[1:]))
+                    n = o.name()
+                    # 01234
+                    # 5
+                    if(int(str(n)[:len(n)-5]) == int(u['user'])):
+                        offerings = offerings | CourseOffering.objects.filter(classnumber=int(str(n)[:len(n)-5]))
             if(len(offerings) == 0):
                 break
             for o in offerings:
