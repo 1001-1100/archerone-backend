@@ -127,6 +127,12 @@ class SavedScheduleList(APIView):
           d['courseOfferings'] = courseOfferings
         return Response(serializer.data)
 
+class RandomPalette(APIView):
+  def get(self, request, format=None):
+      payload = {'model':'default'}
+      r = requests.post('http://colormind.io/api/',data=json.dumps(payload))
+      return Response(json.loads(r.text))
+
 class PreferenceList(APIView):
   def get(self, request, pk, format=None):
       preferences = Preference.objects.filter(user=pk)

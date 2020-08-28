@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/generateschedulefriends/', views.SchedulesListFriends.as_view()),
     path('api/getsharecode/<slug:term>/', views.GetShareCode.as_view()),
     path('api/editschedule/', views.EditSchedule.as_view()),
+    path('api/randompalette/', views.RandomPalette.as_view()),
     path('api/saveeditschedule/', views.SaveEditSchedule.as_view()),
     path('api/checkconflicts/', views.CheckConflicts.as_view()),
     path('api/checkenlist/<int:pk>/', views.CheckEnlist.as_view()),
