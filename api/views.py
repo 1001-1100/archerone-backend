@@ -438,11 +438,9 @@ class AddCourseOffering(APIView):
 
 class ManualScheduleAdd(APIView):
   def post(self, request, format=None):
-    print(request.data['title'])
-    print(request.data['courseOfferings'])
-    print(request.data['user'])
     courseOfferings = []
-    for c in request.data['courseOfferings']:
+    print(json.loads(request.data['courseOfferings'])
+    for c in json.loads(request.data['courseOfferings']):
       print(c)
       data = c.split(' ')
       print(data)
