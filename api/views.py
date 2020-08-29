@@ -438,6 +438,7 @@ class AddCourseOffering(APIView):
 
 class ManualScheduleAdd(APIView):
   def post(self, request, format=None):
+    schedule = Schedule.objects.get_or_create(title=request.data['title'],user=request.data['user'])
     courseOfferings = []
     receivedOfferings = json.loads(request.data['courseOfferings'])
     for c in receivedOfferings:
@@ -450,8 +451,8 @@ class ManualScheduleAdd(APIView):
       course = Course.objects.get(course_code=course_code)
       offerings = CourseOffering.objects.filter(course=course, section=section)
       for o in offerings:
-        courseOfferings.append(o)
-    Schedule.objects.get_or_create(title=request.data['title'],courseOfferings=courseOfferings,user=request.data['user'])
+        schedule.courseOfferings.add(o)
+    schedule.save()
       
 
 class SchedulesList(APIView):
