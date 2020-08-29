@@ -438,6 +438,7 @@ class AddCourseOffering(APIView):
 
 class ManualScheduleAdd(APIView):
   def post(self, request, format=None):
+    print(request.data)
     courseOfferings = []
     for c in request.data['courseOfferings']:
       section = Section.objects.get(section_code=c['section'])
