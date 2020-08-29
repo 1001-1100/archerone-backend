@@ -442,8 +442,10 @@ class ManualScheduleAdd(APIView):
     courseOfferings = []
     for c in request.data['courseOfferings']:
       data = c.split(' ')
-      section_code = data[0]
-      course_code = data[1]
+      print(c)
+      print(data)
+      course_code = data[0]
+      section_code = data[1]
       section = Section.objects.get(section_code=section_code)
       course = Course.objects.get(course_code=course_code)
       offerings = CourseOffering.objects.filter(course=course, section=section)
