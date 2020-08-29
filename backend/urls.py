@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/addcart/', views.AddCart.as_view()),
     path('api/removecart/', views.RemoveCart.as_view()),
     path('api/addcourseoffering/', views.AddCourseOffering.as_view()),
+    path('api/manualscheduleadd/', views.ManualScheduleAdd.as_view()),
     path('api/addcourse/<slug:term>/', views.RetrieveCourse.as_view()),   
     path('api/addundesirableclass/', views.AddUndesirableClass.as_view()),   
     path('api/removeundesirableclass/', views.RemoveUndesirableClass.as_view()),   
