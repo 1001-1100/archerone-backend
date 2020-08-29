@@ -454,6 +454,7 @@ class ManualScheduleAdd(APIView):
       for o in offerings:
         schedule.courseOfferings.add(o)
     schedule.save()
+    return Response(None)
       
 
 class SchedulesList(APIView):
