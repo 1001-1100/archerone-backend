@@ -305,8 +305,14 @@ def addFriendsConstraints(z3, users):
                             b = Bool(str(u2['user'])+str(o.classnumber))
                             z3.add_soft(Implies(a,b), 50)
         for c in u['scheduleClasses']:
-            a = Bool(str(u['user'])+str(c))
-            z3.add_soft(a, 25)
+            offerings = CourseOffering.objects.filter(classnumber=int(c))
+            foundCourse = False
+            for o in offerings:
+                if(o.course in (u['highCourses'] + u['lowCourses'])):
+                    foundCourse = True
+            if(foundCourse):
+                a = Bool(str(u['user'])+str(c))
+                z3.add_soft(a, 25)
 
 def solveFriends(users):
     z3 = Optimize()
