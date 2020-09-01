@@ -75,4 +75,5 @@ urlpatterns = [
     path('api/refresh-token/', refresh_jwt_token),
     # path('', include('django.contrib.auth.urls')),                
     path('accounts/', include('allauth.urls')),                
+    path('admin/', include('admin.site.urls')),                
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
