@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_staffuser(self, email, name, date_of_birth, password):
-        user = self.create_user(
+        user = self.model(
             email,
             password=password,
             date_of_birth=date_of_birth,         
@@ -28,11 +28,11 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, name, date_of_birth, password):
-        user = self.create_user(
+        user = self.model(
             email,
             password=password,
             date_of_birth=date_of_birth,
-            name= "True",
+            name=name,
         )
         user.staff = True
         user.admin = True
