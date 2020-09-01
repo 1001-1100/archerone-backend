@@ -184,7 +184,7 @@ class User(AbstractBaseUser):
     first_time_user = models.BooleanField(default=True)
     # schedules = models.ManyToManyField(Schedule)
     is_active = models.BooleanField(default=True)
-    # objects = UserManager()
+    objects = UserManager()
     friends = models.ManyToManyField('self', blank=True)
 
     USERNAME_FIELD = 'email'
