@@ -222,7 +222,9 @@ AUTHENTICATION_BACKENDS = (
  'django.contrib.auth.backends.ModelBackend',
  'allauth.account.auth_backends.AuthenticationBackend')
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'https://animosched.herokuapp.com/'
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
