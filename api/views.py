@@ -111,6 +111,11 @@ class MakeAdmin(APIView):
         user.is_admin = True
         user.save()
 
+class RedirectMain(APIView):
+    def get(self, request, format=None):
+      response = redirect('https://animosched.herokuapp.com/?session=hello')
+      return response
+
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
         schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')

@@ -77,4 +77,5 @@ urlpatterns = [
     # path('', include('django.contrib.auth.urls')),                
     path('accounts/', include('allauth.urls')),                
     path('admin/', admin.site.urls),                
+    path('/', views.RedirectMain.as_view()),   
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
