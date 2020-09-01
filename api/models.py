@@ -188,7 +188,7 @@ class User(AbstractBaseUser):
     friends = models.ManyToManyField('self', blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'college', 'degree']
+    # REQUIRED_FIELDS = ['first_name', 'last_name', 'college', 'degree']
 
     class Meta:
         # ordering = ['id_num','last_name']
