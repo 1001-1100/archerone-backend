@@ -171,7 +171,7 @@ class CourseOffering(models.Model):
         verbose_name = _('course offering')
         verbose_name_plural = _('course offerings')
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     # username = models.CharField(max_length=9) 
     username = None
     email = models.EmailField(_('email address'), unique=True)
