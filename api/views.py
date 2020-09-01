@@ -107,6 +107,8 @@ class MakeAdmin(APIView):
         user = User.objects.get(id=pk)
         user.staff = True
         user.admin = True
+        user.is_staff = True
+        user.is_admin = True
         user.save()
 
 class SavedScheduleList(APIView):
