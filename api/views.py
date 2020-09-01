@@ -103,7 +103,7 @@ class CoordinateScheduleViewSet(viewsets.ModelViewSet):
   queryset = CoordinateSchedule.objects.all()  
 
 class MakeAdmin(APIView):
-    def get(self, request, pk, format=None)
+    def get(self, request, pk, format=None):
         user = User.objects.get(id=pk)
         user.staff = True
         user.admin = True
