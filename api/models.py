@@ -186,6 +186,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     objects = UserManager()
     friends = models.ManyToManyField('self', blank=True)
+    is_staff = models.BooleanField(null=True)
+    is_admin = models.BooleanField(null=True)
 
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['first_name', 'last_name', 'college', 'degree']
