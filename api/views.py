@@ -115,7 +115,7 @@ class RedirectMain(APIView):
     def get(self, request, format=None):
       sessionid = request.COOKIES.get('sessionid')
       token = request.COOKIES.get('XCSRF-TOKEN')
-      response = redirect('https://animosched.herokuapp.com/?sessionid='+sessionid+'&XCSRF-TOKEN='+token)
+      response = redirect('https://animosched.herokuapp.com/redirect?sessionid='+sessionid+'&XCSRF-TOKEN='+token)
       return response
 
 class SavedScheduleList(APIView):
