@@ -128,7 +128,7 @@ class SignIn(APIView):
       try:
         user = User.objects.get(email=email)
         response['user'] = user.id
-        return response
+        return Response(response)
       except User.DoesNotExist:
         response['loggedIn'] = False
         return Response(response)
