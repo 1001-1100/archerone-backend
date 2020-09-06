@@ -119,7 +119,7 @@ class RedirectMain(APIView):
       return response
 
 class SignIn(APIView):
-    def get(self, request, format=None):
+    def post(self, request, format=None):
       email = request.data['email']
       firstName = request.data['firstName']
       lastName = request.data['lastName']
