@@ -72,7 +72,7 @@ urlpatterns = [
     path('api/auth/', include('rest_auth.urls')),                
     # path('api/auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
     # path('api/auth/registration/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    path('api/auth/restregistration/', include('rest_auth.urls')),                
+    path('api/auth/registration/', include('rest_auth.urls')),                
     path('api/auth/registration/', include('allauth.urls')),                
     path('api/refresh-token/', refresh_jwt_token),
     # path('', include('django.contrib.auth.urls')),                
