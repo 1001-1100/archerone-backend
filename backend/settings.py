@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -176,7 +174,7 @@ SESSION_SAME_COOKIE = None #temp disable
 # REST-related
 REST_SESSION_LOGIN = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -216,29 +214,9 @@ JWT_AUTH = {
 
 REST_USE_JWT = True
 
-# For Google Sign-In
-
 AUTHENTICATION_BACKENDS = (
  'django.contrib.auth.backends.ModelBackend',
  'allauth.account.auth_backends.AuthenticationBackend')
-
-LOGIN_REDIRECT_URL = '/'
-
-SOCIALACCOUNT_AUTO_SIGNUP = True
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
-
-SESSION_COOKIE_DOMAIN = '.animosched.live'
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
