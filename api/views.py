@@ -131,7 +131,7 @@ class SignIn(APIView):
         return response
       except User.DoesNotExist:
         response['loggedIn'] = False
-        return response
+        return Response(response)
 
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
