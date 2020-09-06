@@ -118,6 +118,21 @@ class RedirectMain(APIView):
       response = redirect('https://animosched.herokuapp.com/redirect?sessionid='+sessionid+'&XCSRF-TOKEN='+token)
       return response
 
+class SignIn(APIView):
+    def get(self, request, format=None):
+      email = request.data['email']
+      firstName = request.data['firstName']
+      lastName = request.data['lastName']
+      response = {'loggedIn':True, 'email': email, 'firstName': firstName, 'lastName': lastName}
+
+      try:
+        user = User.objects.get(email=email)
+        response['user'] = user.id
+        return response
+      except User.DoesNotExist:
+        response['loggedIn'] = False
+        return response
+
 class SavedScheduleList(APIView):
     def get(self, request, pk, format=None):
         schedules = Schedule.objects.filter(user=pk).order_by('-timestamp')
