@@ -475,8 +475,8 @@ class AddDegree(APIView):
     college = College.objects.get_or_create(college_name=request['college'])[0]
     print(college)
     degree_code = request['degree_code']
-    degree = Degree.objects.get_or_create(degree_code=degree_code, college=college)
-    return Response([degree[0].id, college[0].id])
+    degree = Degree.objects.get_or_create(degree_code=degree_code, college=college)[0]
+    return Response([degree.id, college.id])
 
 class ManualScheduleAdd(APIView):
   def post(self, request, format=None):

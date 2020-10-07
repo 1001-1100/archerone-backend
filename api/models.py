@@ -22,7 +22,7 @@ class College(models.Model):
 
 class Degree(models.Model):
     degree_code = models.CharField(max_length=8, unique=True)
-    degree_name = models.CharField(max_length=120, unique=True)
+    degree_name = models.CharField(max_length=120, unique=True, null=True)
     college = models.ForeignKey(College, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
