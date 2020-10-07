@@ -474,7 +474,7 @@ class AddDegree(APIView):
     request = request.data
     college = College.objects.get_or_create(college_name=request['college'])
     degree_code = request['degree_code']
-    degree = Degree.objects.get_or_create(degree_code=degree_code, degree_name='', college=college)
+    degree = Degree.objects.get_or_create(degree_code=degree_code, degree_name='', college=college.id)
     return Response([degree.id, college.id])
 
 class ManualScheduleAdd(APIView):
