@@ -469,6 +469,14 @@ class AddCourseOffering(APIView):
             o.save()
     return Response(course_code)
 
+class AddDegree(APIView):
+  def post(self, request, format=None):
+    request = request.data
+    college = College.objects.get_or_create(college_name=request['college'])
+    degree_code = request['degree_code']
+    degree = Degree.objects.get_or_create(degree_code=degree_code, degree_name='', college=college)
+    return Response([degree.id, college.id])
+
 class ManualScheduleAdd(APIView):
   def post(self, request, format=None):
     user = User.objects.get(id=int(request.data['user']))
