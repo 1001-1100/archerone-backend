@@ -175,7 +175,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # username = models.CharField(max_length=9) 
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    id_num = models.IntegerField(unique=True, null=True)
+    id_num = models.IntegerField(null=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     college = models.ForeignKey(College, on_delete=models.CASCADE, null=True)
